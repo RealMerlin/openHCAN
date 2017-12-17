@@ -33,7 +33,7 @@ clean:
 	make cppDienste xx="sudo make clean"
 	make firmware xx="sudo make clean" parm2=MCU=atmega32
 	make firmware xx="sudo make clean" parm2=MCU=atmega644
-	make firmwareOhneEds xx="sudo make clean"
+#	make firmwareOhneEds xx="sudo make clean"
 	make tools xx="sudo make clean"
 	@# wuerde "Dropbox-Pfad" erzwingen:  cd hcanhab2_mqtt; make clean
 	#
@@ -45,7 +45,7 @@ all:
 	make cppDienste xx="make all"
 	make firmware xx="make all" parm2=MCU=atmega32
 	make firmware xx="sudo make clean" MCU=atmega644; make firmware xx="make all" MCU=atmega644
-	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
+#	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
 	
 install:
 	make strukturen xx="sudo make install"
@@ -60,8 +60,8 @@ staticAnalyse:
 	make cppDienste xx="scan-build -o ./scanBuild make allSrc -j4"
 	@# avr-clang notwendig:   make firmware xx="scan-build -o ./scanBuild make all -j4"
 	
-staticAnalyseClean:
-	sudo find -type f -name "scanBuild" | xargs rm -f
+#staticAnalyseClean:
+#	sudo find -type f -name "scanBuild" | xargs rm -f
 
 strukturen:
 	cd xml; $(xx)
@@ -83,10 +83,10 @@ cppDienste:
 firmware: 
 	cd hcanbl; $(xx) $(parm2)
 	cd firmwares/controllerboard-1612-v01; $(xx) $(parm2)
-	cd firmwares/userpanel-v01; $(xx) $(parm2)
+#	cd firmwares/userpanel-v01; $(xx) $(parm2)
 
 firmwareOhneEds:
-	cd firmwares/usv-modul; $(xx)
+#	cd firmwares/usv-modul; $(xx)
 
 tools:
 	cd tools; $(xx)
