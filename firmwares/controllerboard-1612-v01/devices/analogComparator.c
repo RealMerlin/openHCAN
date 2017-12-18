@@ -33,6 +33,10 @@
 #elif MCU_atmega644
 	#define AC_REG ADCSRB
 	#define AC_INT ANALOG_COMP_vect
+#elif MCU_atmega328p
+	// TODO: Register prüfen
+	#define AC_REG ADCSRB
+	#define AC_INT ADC_vect
 #endif
 
 

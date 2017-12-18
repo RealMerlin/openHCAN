@@ -11,10 +11,21 @@
 
 #include "onewire.h"
 
+#if defined (__AVR_ATmega328P__)
+
+#define W1_PIN  ow_pin
+#define W1_IN   PINC
+#define W1_OUT  PORTC
+#define W1_DDR  DDRC
+
+#else
+
 #define W1_PIN  ow_pin
 #define W1_IN   PINA
 #define W1_OUT  PORTA
 #define W1_DDR  DDRA
+
+#endif
 
 uint8_t ow_pin = 0;
 

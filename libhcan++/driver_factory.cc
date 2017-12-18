@@ -69,6 +69,20 @@ board_driver_p driver_factory::make_driver (board_connection &bcon,
 						return board_driver_p(new atmega32_board_driver(bcon, 256));
 				};
 			}
+		case HCAN_ARCH_ATMEGA328P :
+			{
+				switch (type)
+				{
+					case 4 : // Controllerboard-1612 v01
+						return board_driver_p(new controller1612_driver(bcon));
+					case 5 : // Userpanel v01
+						return board_driver_p(new userpanel_driver(bcon));
+					default :
+						cerr << "warning: unknown board type id " << int(type)
+							<< ", using generic atmega328p driver..." << endl;
+						return board_driver_p(new atmega32_board_driver(bcon));
+				};
+			}
 
 		default : // unknown arch
 			cerr << "warning: unknown arch id " << int(arch)

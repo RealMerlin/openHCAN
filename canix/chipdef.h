@@ -183,6 +183,37 @@
     #define APP_END APP_PAGES * SPM_PAGESIZE 
   #endif  
 
+#elif defined(__AVR_ATmega328P__)
+
+	#define sig_byte3 0x1E
+	#define sig_byte2 0x95
+	#define sig_byte1 0x0F
+
+	//#define devtype 0x??       // Mega328p device code ?????
+
+//  #define PAGESIZE 128       // Size in Bytes
+
+	#ifdef _B128
+		#define APP_PAGES ((2*16384UL / SPM_PAGESIZE)- (2*128 / SPM_PAGESIZE ))
+		#define APP_END APP_PAGES * SPM_PAGESIZE
+	#endif
+	#ifdef _B256
+		#define APP_PAGES ((2*16384UL / SPM_PAGESIZE)- (2*256 / SPM_PAGESIZE ))
+		#define APP_END APP_PAGES * SPM_PAGESIZE
+	#endif
+	#ifdef _B512
+		#define APP_PAGES ((2*16384UL / SPM_PAGESIZE)- (2*512 / SPM_PAGESIZE ))
+		#define APP_END APP_PAGES * SPM_PAGESIZE
+	#endif
+	#ifdef _B1024
+		#define APP_PAGES ((2*16384UL / SPM_PAGESIZE)- (2*1024 / SPM_PAGESIZE ))
+		#define APP_END APP_PAGES * SPM_PAGESIZE
+	#endif
+	#ifdef _B2048
+		#define APP_PAGES ((2*16384UL / SPM_PAGESIZE)- (2*2048 / SPM_PAGESIZE ))
+		#define APP_END APP_PAGES * SPM_PAGESIZE
+	#endif
+
 #else
 	#error "no definition for MCU available in chipdef.h"
 #endif

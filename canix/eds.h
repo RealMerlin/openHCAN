@@ -13,7 +13,7 @@
 #define EDS_START ((uint8_t *) 32)
 #define EDS_DATA_START (EDS_START + 2)
 
-#ifdef MCU_atmega32
+#ifdef MCU_atmega32 || MCU_atmega328p
 	#define EDS_DATA_END 1023 //0x3ff
 #elif MCU_atmega644 //mit doppelter EEPROM- und SRAM-Groesse
 	#define EDS_DATA_END 2047 //0x7ff

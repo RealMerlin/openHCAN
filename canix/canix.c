@@ -188,7 +188,7 @@ void canix_rtc_init(void)
 #ifdef MCU_atmega32
 	TCCR0 = (1<<CS00)|(1<<CS02); // Divider 1024
 	TIMSK = (1<<TOIE0); // Timer0 Interrupt einschalten
-#elif MCU_atmega644
+#elif MCU_atmega644  || MCU_atmega328p
 	TCCR0B = (1<<CS00)|(1<<CS02); // Divider
 	TIMSK0 = (1<<TOIE0); // Timer0 Interrupt einschalten
 #endif

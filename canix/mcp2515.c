@@ -83,6 +83,18 @@
 #define SPI_CS_PORT     PORTB
 #define SPI_CS		4
 
+#elif MCU_atmega328p
+
+#define SPI_PORT_DDR DDRB
+#define SPI_PORT     PORTB
+#define SPI_MISO    4
+#define SPI_MOSI    3
+#define SPI_SCK     5
+
+#define SPI_CS_PORT_DDR	DDRB
+#define SPI_CS_PORT		PORTB
+#define SPI_CS		2
+
 #else
 
 #error "NO MCU type defined"

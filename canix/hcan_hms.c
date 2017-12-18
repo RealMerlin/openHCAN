@@ -69,6 +69,8 @@ void canix_SFP_HMS_handler(const canix_frame *frame)
 			answer.data[2] = 1;
 #elif defined (__AVR_ATmega644__)
 			answer.data[2] = 2;
+#elif defined (__AVR_ATmega328P__)
+            answer.data[2] = 3;
 #endif
 			answer.data[3] = eeprom_read_byte((uint8_t *)EEPR_BOARD_TYPE);
 			answer.size = 4;
