@@ -36,11 +36,32 @@
 #define LED_PORT_DDR DDRB
 #endif
 
+#ifdef CANIX_LED_SETUP2X
+#define CANIX_LED_YELLOW 1
+#define CANIX_LED_RED    0
+#define LED_PORT PORTD
+#define LED_PORT_DDR DDRD
+#endif
+
+#ifdef CANIX_LED_SETUP1X
+#define CANIX_LED_YELLOW 0
+#define CANIX_LED_RED    0
+#define LED_PORT PORTB
+#define LED_PORT_DDR DDRB
+#endif
+
 #ifdef CANIX_LED_SETUP3
 #define CANIX_LED_YELLOW 2
 #define CANIX_LED_RED    1
 #define LED_PORT PORTA
 #define LED_PORT_DDR DDRA
+#endif
+
+#ifdef CANIX_LED_SETUP32
+#define CANIX_LED_YELLOW 3
+#define CANIX_LED_RED    4
+#define LED_PORT PORTB
+#define LED_PORT_DDR DDRB
 #endif
 
 
@@ -54,6 +75,7 @@
 
 #define canix_led_enable(LED)  { LED_PORT &= ~ (1<< LED); }
 #define canix_led_disable(LED) { LED_PORT |=  1<< LED; }
+#define canix_led_toggle(LED) { LED_PORT ^=  (1<< LED); }
 #define canix_led_init_ports() \
 { \
     LED_PORT_DDR |=  (1<< CANIX_LED_RED) | (1<< CANIX_LED_YELLOW); \
