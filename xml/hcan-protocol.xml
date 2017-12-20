@@ -648,6 +648,56 @@
 			<message name="ADDITIONAL_PORTS_DEVICE_IGNORED" id="121"
 				description="Error message for ports Device" >
 			</message>
+			
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+			<message name="GARTENBEWAESSERUNG_SET_TIMER" id="210"
+				description="" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="time1" description="" />
+				<param pos="2" name="time2" description="" />
+			</message>
+			<message name="GARTENBEWAESSERUNG_STATE_REQUEST" id="211"
+				description="" >
+				<param pos="0" name="gruppe" description="" />
+			</message>
+			<message name="GARTENBEWAESSERUNG_STATE_REPLAY" id="212"
+				description="" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="time1" description="" />
+				<param pos="2" name="time2" description="" />
+			</message>
+
+			<message name="BEWEGUNGSMELDER_LASTMOVMENT_REQUEST" id="215"
+				description="" >
+				<param pos="0" name="gruppe" description="" />
+			</message>
+			<message name="BEWEGUNGSMELDER_LASTMOVMENT_REPLAY" id="216"
+				description="" >
+				<param pos="0" name="dayOfMonth" description="" />
+				<param pos="1" name="monthOfYear" description="" />
+				<param pos="2" name="year" description="" />
+				<param pos="3" name="hour" description="" />
+				<param pos="4" name="minute" description="" />
+				<param pos="5" name="seconds" description="" />
+			</message>
+
+			<message name="WS2812A_SEND" id="217"
+				description="" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="Pattern" description="" />
+				<param pos="2" name="R" description="" />
+				<param pos="3" name="G" description="" />
+				<param pos="4" name="B" description="" />
+				<param pos="5" name="BenutzeLEDsPattern" description="" />
+			</message>
+
+			<message name="WS2812A_REPLAY" id="218"
+			description="" >
+				<param pos="0" name="gruppe" description="" />
+			</message>
+
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
 		</service>
 
