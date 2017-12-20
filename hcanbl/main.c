@@ -43,12 +43,28 @@
 
 void (*jump_to_app)(void) = 0x0000;
 
+#if defined (__AVR_ATmega32__) || (__AVR_ATmega644__)
 #define SPI_PORT_DDR DDRB
 #define SPI_PORT     PORTB
 #define SPI_MISO    6
 #define SPI_MOSI    5
 #define SPI_SCK     7
+
+#define SPI_CS_PORT		PORTB
+#define SPI_CS_DDR		DDRB
 #define SPI_CS		4
+
+#elif defined (_AVRatmega328P__)
+#define SPI_PORT_DDR DDRB
+#define SPI_PORT     PORTB
+#define SPI_MISO    4
+#define SPI_MOSI    3
+#define SPI_SCK     5
+
+#define SPI_CS_PORT		PORTB
+#define SPI_CS_DDR		DDRB
+#define SPI_CS			2
+#endif
 
 #define MCP2515_OK         (0)
 #define MCP2515_FAIL       (1)
@@ -386,7 +402,7 @@ int main(void)
 	uint32_t id1;
 	uint32_t id2;
 	uint16_t addr;
-#if defined (__AVR_ATmega8__) || (__AVR_ATmega32__)
+#if defined (__AVR_ATmega8__) || (__AVR_ATmega32__) || (__AVR_ATmega328P__)
 	uint8_t i;
 	#define SIZE_OF_FLASHBUFFER SPM_PAGESIZE
 	#if SIZE_OF_FLASHBUFFER > 255
@@ -396,8 +412,8 @@ int main(void)
 	uint16_t i;
 	#define SIZE_OF_FLASHBUFFER SPM_PAGESIZE
 	#if SIZE_OF_FLASHBUFFER > 511
-#error
-#endif
+	#error
+	#endif
 #endif
 	uint8_t flash_buffer[SIZE_OF_FLASHBUFFER];
 
@@ -423,7 +439,7 @@ int main(void)
 #if defined (__AVR_ATmega32__) || (__AVR_ATmega8__)
 	data[2] = MCUCSR;
 	MCUCSR = 0; // Reset Register Flags resetten
-#elif defined (__AVR_ATmega644__)
+#elif defined (__AVR_ATmega644__) || (__AVR_ATmega328P__)
 	data[2] = MCUSR;
 	MCUSR = 0; // Reset Register Flags resetten
 #endif
@@ -476,6 +492,8 @@ int main(void)
 						data[2] = 1;
 #elif defined (__AVR_ATmega644__)
 						data[2] = 2;
+#elif defined (__AVR_ATmega328P__)
+						data[2] = 3;
 #endif
 						data[3] = eeprom_read_byte((uint8_t *)4); //4=EEPR_BOARD_TYPE
 						size = 4;
