@@ -27,13 +27,7 @@ uint8_t darlingtonoutput_getpin(uint8_t n)
 #if defined (__AVR_ATmega328P__)
 	if (n >= 2 && n <= 7)
 	{
-		// Output Modus setzen
-		DDRD |= (1<< n);
-
-		if (state)
-			PORTD |= (1<< n);
-		else
-			PORTD &= ~ (1<< n);
+		return PORTD & (1<< n);
 	}
 #else
 	if (n < 8)
@@ -45,6 +39,7 @@ uint8_t darlingtonoutput_getpin(uint8_t n)
 		n = n - 8;
 		return PORTB & (1<< n);
 	}
+#endif
 	else
 	{
 		return ports_getOutput(n);
@@ -53,6 +48,18 @@ uint8_t darlingtonoutput_getpin(uint8_t n)
 
 void darlingtonoutput_setpin(uint8_t n, uint8_t state)
 {
+#if defined (__AVR_ATmega328P__)
+	if (n >= 2 && n <= 7)
+	{
+		// Output Modus setzen
+		DDRD |= (1<< n);
+
+		if (state)
+			PORTD |= (1<< n);
+		else
+			PORTD &= ~ (1<< n);
+	}
+#else
 	if (n < 8)
 	{
 		// Output Modus setzen

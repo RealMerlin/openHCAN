@@ -54,7 +54,7 @@ void (*jump_to_app)(void) = 0x0000;
 #define SPI_CS_DDR		DDRB
 #define SPI_CS		4
 
-#elif defined (_AVRatmega328P__)
+#elif defined (__AVR_ATmega328P__)
 #define SPI_PORT_DDR DDRB
 #define SPI_PORT     PORTB
 #define SPI_MISO    4
