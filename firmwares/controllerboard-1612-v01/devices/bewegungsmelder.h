@@ -26,7 +26,7 @@ typedef struct
 } device_data_bewegungsmelder;
 
 void bewegungsmelder_init(device_data_bewegungsmelder *p, eds_block_p it);
-inline bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_t zyklus);
+inline void bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_t zyklus);
 void bewegungsmelder_can_callback(device_data_bewegungsmelder *p, const canix_frame *frame);
 
 #endif /* BEWEGUNGSMELDER_H_ */

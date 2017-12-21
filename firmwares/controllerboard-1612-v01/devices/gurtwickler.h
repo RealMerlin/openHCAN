@@ -62,7 +62,7 @@ void gurtwickler_init(device_data_gurtwickler *p, eds_block_p it);
  */
 uint8_t gurtwickler_is_in_group(const device_data_gurtwickler *p, uint8_t group);
 
-inline gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus);
+inline void gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus);
 
 void gurtwickler_can_callback(device_data_gurtwickler *p, const canix_frame *frame);
 

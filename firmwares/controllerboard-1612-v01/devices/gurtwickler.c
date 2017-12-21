@@ -57,7 +57,7 @@ uint8_t gurtwickler_is_in_group(const device_data_gurtwickler *p, uint8_t group)
 	return 0;
 }
 
-void gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus)
+inline void gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus)
 {
 	if (zyklus != 10) return; // 10tel-Sekunden-Zyklus verwendet
 	

@@ -43,6 +43,6 @@ uint8_t bewaesserung_is_in_group(const device_data_gartenbewaesserung *p, uint8_
 
 void gartenbewaesserung_can_callback(device_data_gartenbewaesserung *p, const canix_frame *frame);
 
-inline gartenbewaesserung_timer_handler(device_data_gartenbewaesserung *p, uint8_t zyklus);
+inline void gartenbewaesserung_timer_handler(device_data_gartenbewaesserung *p, uint8_t zyklus);
 
 #endif /* GARTENBEWAESSERUNG_H_ */

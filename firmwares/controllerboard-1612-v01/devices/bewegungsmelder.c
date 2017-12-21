@@ -41,7 +41,7 @@ void bewegungsmelder_init(device_data_bewegungsmelder *p, eds_block_p it)
 
 // wird alle 10msec aufgerufen, fuer jede Bewegungsmelder-Instanz einmal
 // 10msec weil mit dem Bewegungsmelder auch Licht eingeschaltet werden soll!!
-void bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_t zyklus)
+inline void bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_t zyklus)
 {
 	if (zyklus != 10) return; // 10tel-Sekunden-Zyklus verwendet
 	
