@@ -33,7 +33,7 @@ clean:
 	make cppDienste xx="sudo make clean"
 	make firmware xx="sudo make clean" parm2=MCU=atmega328p
 	make firmware xx="sudo make clean" parm2=MCU=atmega32
-	make firmware xx="sudo make clean" parm2=MCU=atmega644p
+#	make firmware xx="sudo make clean" parm2=MCU=atmega644p
 #	make firmwareOhneEds xx="sudo make clean"
 	make tools xx="sudo make clean"
 	@# folgendes wuerde den "Dropbox-Pfad" erzwingen:  cd hcanhab2_mqtt; make clean
@@ -44,11 +44,11 @@ all:
 	make strukturen xx="make all"
 	make cDienste xx="make all"
 	make cppDienste xx="make all"
-	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p	
+	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
 	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
 #	make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
 #	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
-	
+
 install:
 	make strukturen xx="sudo make install"
 	make cDienste xx="sudo make install"
@@ -57,24 +57,24 @@ install:
 	# Nun kann die Firmware geladen werden (Bootloader flashen, Firmware loaden) #
 	##############################################################################
 
-staticAnalyse: 
-	make cDienste xx="scan-build -o ./scanBuild make all -j4"
-	make cppDienste xx="scan-build -o ./scanBuild make allSrc -j4"
+#staticAnalyse:
+#	make cDienste xx="scan-build -o ./scanBuild make all -j4"
+#	make cppDienste xx="scan-build -o ./scanBuild make allSrc -j4"
 	@# avr-clang notwendig:   make firmware xx="scan-build -o ./scanBuild make all -j4"
-	
+
 #staticAnalyseClean:
 #	sudo find -type f -name "scanBuild" | xargs rm -f
 
 strukturen:
 	cd xml; $(xx)
 
-cDienste: 
+cDienste:
 	cd hcand; $(xx)
 	cd hcanaddressd; $(xx)
 	cd hcansocketd; $(xx)
-	cd hcan4mqttpc; $(xx)
+#	cd hcan4mqttpc; $(xx)
 
-cppDienste:	
+cppDienste:
 	cd libhcan++; $(xx)
 	cd telican; $(xx)
 	cd libhcandata; $(xx)
@@ -82,7 +82,7 @@ cppDienste:
 	cd hcanswd; $(xx)
 	cd hcandq; $(xx)
 
-firmware: 
+firmware:
 	cd hcanbl; $(xx) $(parm2)
 	cd firmwares/controllerboard-1612-v01; $(xx) $(parm2)
 #	cd firmwares/userpanel-v01; $(xx) $(parm2)
