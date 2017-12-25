@@ -10,26 +10,16 @@ uint8_t tasterport_read(uint8_t n)
 	{
 		// Pins 0-5 sind 1:1 von PORTC auszulesen
 
-		// Modus Input setzen
-		DDRC &= ~ (1<< n);
-
-		// Pullup einschalten
-		PORTC |= (1<< n);
-
+		DDRC &= ~ (1<< n); // Modus Input setzen
+		PORTC |= (1<< n); // Pullup einschalten
 		return PINC & (1<< n);
 	}
-
-	// Pin 6-7 sind PB0 und PB1
 	else if (n == 6 || n == 7)
 	{
-		n = n - 6;
-
-		// Modus Input setzen
-		DDRB &= ~ (1<< n);
-
-		// Pullup einschalten
-		PORTB |= (1<< n);
-
+		// Pin 6-7 sind PB0 und PB1
+		n = n - 6; // Modus Input setzen
+		DDRB &= ~ (1<< n); // Modus Input setzen
+		PORTB |= (1<< n); // Pullup einschalten
 		return PINB & (1<< n);
 	}
 #else
@@ -42,28 +32,16 @@ uint8_t tasterport_read(uint8_t n)
 	{
 		// Pins sind 1:1 von PORTC auszulesen
 
-		// Modus Input setzen
-		DDRC &= ~ (1<< n);
-
-		// Pullup einschalten
-		PORTC |= (1<< n);
-
+		DDRC &= ~ (1<< n); // Modus Input setzen
+		PORTC |= (1<< n); // Pullup einschalten
 		return PINC & (1<< n);
 	}
 	else if (n < 16)
 	{
-		// auf den Bereich 0-7 holen:
-		n &= 0x07;
-
-		// Pins sind zu spiegel ( 0 -> 7, 1 -> 6 etc.)
-		n = 7 - n;
-
-		// Modus Input setzen
-		DDRA &= ~ (1<< n);
-
-		// Pullup einschalten
-		PORTA |= (1<< n);
-
+		n &= 0x07; // auf den Bereich 0-7 holen
+		n = 7 - n; // Pins sind zu spiegel ( 0 -> 7, 1 -> 6 etc.)
+		DDRA &= ~ (1<< n); // Modus Input setzen
+		PORTA |= (1<< n); // Pullup einschalten
 		return PINA & (1<< n);
 	}
 	else if (n < 244)

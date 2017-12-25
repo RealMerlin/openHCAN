@@ -38,7 +38,7 @@
 
 			<message name="DEVICE_TYPE_REPLAY" id="10"
 				description="Liefert den Geraete-Typ">
-				<param pos="0" name="arch" description="0 = Atmega8, 1 = Atmega32, 2 = Atmega644p" />
+				<param pos="0" name="arch" description="0x11 = Atmega32, 0x22 = Atmega644p, 0x33 = Atmega328p" />
 				<param pos="1" name="type" description="Hardware-Board-Typ" />
 			</message>
 
@@ -216,7 +216,7 @@
 			<message name="BOOT_RESETFLAG_LOG" id="1"
 				description="Meldet den Wert des Resetflag-Registers direkt nach dem Booten"
 				details="1: Power-on Reset 2: External Reset 4: Brown-Out Reset 8: Watchdog Reset">
-				<param pos="0" name="flag" description="siehe Atmega8 Referenz-Handbuch, S.39" />
+				<param pos="0" name="flag" description="siehe Atmega Referenz-Handbuch" />
 			</message>
 			<message name="FIRMWARE_CRC16_ERROR" id="2"
 				description="Meldet eine fehlerhafte CRC16 Firmware Pruefsumme">

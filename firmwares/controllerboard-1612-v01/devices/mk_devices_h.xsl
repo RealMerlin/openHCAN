@@ -17,12 +17,11 @@
 extern uint8_t device_config_size[];
 extern uint8_t device_data_size[];
 
-
-#if defined (MCU_atmega32) || (MCU_atmega328p)
+#if defined(__AVR_ATmega328P__) || defined(__AVR_ATmega32__)
 	#define MAX_PDEVICE_DATA         64
 	#define MAX_DEVICE_DATA         768
 	#define MAX_MEM_CRITICAL_SIZE   256
-#elif defined (MCU_atmega644) // ATmega644p, mit doppelter EEPROM- und SRAM-Groesse:
+#elif defined(__AVR_ATmega644P__) // ATmega644p, mit doppelter EEPROM- und SRAM-Groesse:
 	#define MAX_PDEVICE_DATA        128
 	#define MAX_DEVICE_DATA        2048
 	#define MAX_MEM_CRITICAL_SIZE   256
