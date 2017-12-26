@@ -13,17 +13,13 @@ adr = 1022
 OBJCOPY = avr-objcopy
 CXX = avr-gcc
 
-ifeq ($(MCU),atmega328p)
-	F_CPU = 16000000
-else # MCU_atmega32 || MCU_atmega644p
-	F_CPU = 3686400
-endif
+F_CPU = 3686400
 
 F_CAN   = 8000000
-CAN_SPEED = 125000
+CAN_SPEED = 50000
 
 DEFINES = -DMCU_$(MCU) -DF_CPU=$(F_CPU) -DF_CAN=$(F_CAN) -DCAN_SPEED=$(CAN_SPEED) \
-          -DCANIX_SYSLOG -DCANIX_HMS -DCANIX_RTS -DCANIX_EDS
+          -DCANIX_SYSLOG -DCANIX_HMS -DCANIX_RTS -DCANIX_EDS -D$(LED)
 
 CFLAGS =  -mmcu=$(MCU) -Wall -Werror -Wstrict-prototypes -Os -mcall-prologues
 CFLAGS += -I. -I../../canix -I../.. -I../../include

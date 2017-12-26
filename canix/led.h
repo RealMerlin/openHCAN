@@ -21,7 +21,6 @@
 #ifndef CANIX_LED_H
 #define CANIX_LED_H
 
-
 #ifdef CANIX_LED_SETUP1
 #define CANIX_LED_YELLOW 1
 #define CANIX_LED_RED    2
@@ -30,6 +29,7 @@
 #endif
 
 #ifdef CANIX_LED_SETUP2
+#pragma message "CANIX_LED_SETUP2"
 #define CANIX_LED_YELLOW 2
 #define CANIX_LED_RED    1
 #define LED_PORT PORTB
@@ -37,6 +37,7 @@
 #endif
 
 #ifdef CANIX_LED_SETUP2X
+#pragma message "CANIX_LED_SETUP2"
 #define CANIX_LED_YELLOW 1
 #define CANIX_LED_RED    0
 #define LED_PORT PORTD
@@ -44,6 +45,7 @@
 #endif
 
 #ifdef CANIX_LED_SETUP1X
+#pragma message "CANIX_LED_SETUP1X"
 #define CANIX_LED_YELLOW 0
 #define CANIX_LED_RED    0
 #define LED_PORT PORTB
