@@ -122,6 +122,22 @@ static inline void sendMessage(device_data_schalter *p, uint8_t active)
 
 static inline uint8_t inputport_read(device_data_schalter *p, uint8_t n)
 {
+#if defined(__AVR_ATmega328P__)
+   	if (n < 8)
+	{
+		// Pins sind 1:1 von PORTC auszulesen
+
+		// Modus Input setzen
+		DDRC &= ~ (1<< n);
+
+		if(p->config.feature & (1<<FEATURE_SCHALTER_PULLUP_AUS))
+		    PORTC &= ~ (1<< n); // Pullup ausschalten
+		else
+		    PORTC |= (1<< n); // Pullup einschalten
+
+		return PINC & (1<< n);
+	}
+#else
 	if (expanderActive && (n < 2))
 	{
     	return 0;
@@ -158,6 +174,7 @@ static inline uint8_t inputport_read(device_data_schalter *p, uint8_t n)
 	{
 		return ports_getInput (n); // n-tes Bit abfragen
 	}
+#endif
 
 	return 0;
 }
