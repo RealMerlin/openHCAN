@@ -2,7 +2,7 @@ TARGET = hcanaddressd
 SRC = main.c socket.c
 
 CXX = gcc
-CFLAGS = -O2 -I. -Wall -g #-DDEBUG0
+CFLAGS = -O2 -I. -Wall -g -Wno-unused-result #-DDEBUG0
 
 all:
 	$(CXX) $(CFLAGS) -o $(TARGET) $(SRC)

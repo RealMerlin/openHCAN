@@ -8,7 +8,7 @@ OBJ = $(patsubst %.cc,%.o,$(wildcard *.cc))
 CXX = g++
 
 INC = -I.. -I. -I../include
-CXXFLAGS = -Wall -O2 $(INC) -fPIC #-Werror
+CXXFLAGS = -Wall -O2 $(INC) -fPIC -Wno-unused-result #-Werror
 
 all: $(TARGET).so
 
