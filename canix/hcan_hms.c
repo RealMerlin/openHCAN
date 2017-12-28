@@ -67,20 +67,17 @@ void canix_SFP_HMS_handler(const canix_frame *frame)
 			answer.data[2] = 0;
 			if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x0F)
 				answer.data[2] += 0x30; // µC-Signatur: __AVR_ATmega328P__
-/* abwaertskompatibel:	else if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x02)
+			else if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x02)
 				answer.data[2] += 0x10; // µC-Signatur: __AVR_ATmega32__
 			else if (SIGNATURE_1 == 0x96 && SIGNATURE_2 == 0x0A)
 				answer.data[2] += 0x20; // µC-Signatur: __AVR_ATmega644P__
-*/
+
 #if defined (__AVR_ATmega32__)
 			answer.data[2] += 0x01; // compiliert fuer __AVR_ATmega32__
-#pragma message "ATmega32"
 #elif defined (__AVR_ATmega644P__)
 			answer.data[2] += 0x02;
-#pragma message "ATmega644P"
 #elif defined (__AVR_ATmega328P__)
 			answer.data[2] += 0x03;
-#pragma message "ATmega328P"
 #endif
 			answer.data[3] = eeprom_read_byte((uint8_t *)EEPR_BOARD_TYPE);
 			answer.size = 4;

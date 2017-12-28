@@ -22,7 +22,6 @@
 #define CANIX_LED_H
 
 #if defined(__AVR_ATmega32__)
-#pragma message "ATmega32 LED_SETUP"
 #define CANIX_LED_YELLOW 1
 #define CANIX_LED_RED    2
 #define LED_PORT PORTB
@@ -30,7 +29,6 @@
 #endif
 
 #if defined(__AVR_ATmega328P__)
-#pragma message "ATmega328p LED_SETUP"
 #define CANIX_LED_YELLOW 1
 #define CANIX_LED_RED    0
 #define LED_PORT PORTD
