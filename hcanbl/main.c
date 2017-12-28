@@ -29,8 +29,7 @@
 #include "../canix/mcp2515_defs.h"
 #include "../canix/mcp2515_bl.h"
 
-#define CANIX_NO_LED_SETUP
-//#define CANIX_LED_SETUP2
+//#define CANIX_NO_LED_SETUP
 #include "../canix/led.h"
 
 #include "../include/hcan_multicast.h"
@@ -76,7 +75,6 @@ void spi_init(void)
 	// f(spi) = f(cpu) / 4
 	
 	SPCR = (1<<SPE)|(1<<MSTR);
-	SPSR = (1<<SPI2X); // Wie in der canix.c
 }
 
 uint8_t spi_putc( uint8_t data )

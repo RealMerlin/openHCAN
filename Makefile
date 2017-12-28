@@ -31,8 +31,8 @@ clean:
 	make strukturen xx="sudo make clean"
 	make cDienste xx="sudo make clean"
 	make cppDienste xx="sudo make clean"
-	make firmware xx="sudo make clean" parm2=MCU=atmega328p parm3=LED=CANIX_LED_SETUP1X
-	make firmware xx="sudo make clean" parm2=MCU=atmega32   parm3=LED=CANIX_LED_SETUP1
+	make firmware xx="sudo make clean" parm2=MCU=atmega328p
+	make firmware xx="sudo make clean" parm2=MCU=atmega32
 #	make firmware xx="sudo make clean" parm2=MCU=atmega644p
 #	make firmwareOhneEds xx="sudo make clean"
 	make tools xx="sudo make clean"
@@ -44,8 +44,8 @@ all:
 	make strukturen xx="make all"
 	make cDienste xx="make all"
 	make cppDienste xx="make all"
-	make firmware xx="make all" parm2=MCU=atmega328p parm3=LED=CANIX_LED_SETUP1X;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p parm3=LED=CANIX_LED_SETUP1X
-	make firmware xx="make all" parm2=MCU=atmega32 parm3=LED=CANIX_LED_SETUP1;     make firmware xx="sudo make clean_part" parm2=MCU=atmega32   parm3=LED=CANIX_LED_SETUP1
+	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
+	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
 #	make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
 #	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
 
@@ -84,8 +84,8 @@ cppDienste:
 	cd hcandq; $(xx)
 
 firmware:
-	cd hcanbl; $(xx) $(parm2) $(parm3)
-	cd firmwares/controllerboard-1612-v01; $(xx) $(parm2) $(parm3)
+	cd hcanbl; $(xx) $(parm2)
+	cd firmwares/controllerboard-1612-v01; $(xx) $(parm2)
 #	cd firmwares/userpanel-v01; $(xx) $(parm2)
 
 firmwareOhneEds:
