@@ -467,11 +467,11 @@ int main(void)
 						data[2] = 0;
 						if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x0F)
 							data[2] += 0x30; // µC-Signatur: __AVR_ATmega328P__
-/* abwaertskompatibel:	else if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x02)
+						else if (SIGNATURE_1 == 0x95 && SIGNATURE_2 == 0x02)
 							data[2] += 0x10; // µC-Signatur: __AVR_ATmega32__
 						else if (SIGNATURE_1 == 0x96 && SIGNATURE_2 == 0x0A)
 							data[2] += 0x20; // µC-Signatur: __AVR_ATmega644P__
-*/
+
 #if defined (__AVR_ATmega32__)
 						data[2] += 0x01; // compiliert fuer __AVR_ATmega32__
 #elif defined (__AVR_ATmega644P__)
