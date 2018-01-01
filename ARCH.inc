@@ -26,5 +26,5 @@ export MCU = atmega644p
 
 # Choose CAN-Server-IP for load firmware (eg. 192.168.1.42)
 ###########################
-export IP_HI = 192.168.1.42
+export IP_HI = 192.168.0.102
 ###########################
