@@ -23,26 +23,17 @@ include ./ARCH.inc
 
 bananapi:
 	make strukturen xx="sudo make clean"
-	cd hcand; sudo make clean
-	cd hcanaddressd; sudo make clean
-	cd hcansocketd; sudo make clean
-	cd hcanswd; sudo make clean
-	cd hcandq; sudo make clean
+	make cDienste xx="sudo make clean"
+	make cppDienste xx="sudo make clean"
 	make tools xx="sudo make clean"
 	
-	make strukturen xx="sudo make all"
-	cd hcand; sudo make all
-	cd hcanaddressd; sudo make all
-	cd hcansocketd; sudo make all
-	cd hcanswd; sudo make all
-	cd hcandq; sudo make all
+	make strukturen xx="make all"
+	make cDienste xx="make all"
+	make cppDienste xx="make all"
 	
 	make strukturen xx="sudo make install"
-	cd hcand; sudo make install
-	cd hcanaddressd; sudo make install
-	cd hcansocketd; sudo make install
-	cd hcanswd; sudo make install
-	cd hcandq; sudo make install
+	make cDienste xx="sudo make install"
+	make cppDienste xx="sudo make install"
 	
 	make tools xx="sudo make all"
 
