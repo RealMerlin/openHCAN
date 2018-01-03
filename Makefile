@@ -21,6 +21,22 @@
 include ./ARCH.inc
 .PHONY: tools
 
+bananapi:
+	make strukturen xx="sudo make clean"
+	make cDienste xx="sudo make clean"
+	make cppDienste xx="sudo make clean"
+	make tools xx="sudo make clean"
+	
+	make strukturen xx="make all"
+	make cDienste xx="make all"
+	make cppDienste xx="make all"
+	
+	make strukturen xx="sudo make install"
+	make cDienste xx="sudo make install"
+	make cppDienste xx="sudo make install"
+	
+	make tools xx="sudo make all"
+
 alles:
 	make clean
 	make all
