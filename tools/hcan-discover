@@ -11,21 +11,28 @@ POLITE_TIME=40
 
 	telican -s $addr -p 36 > /dev/null 2>&1
 	sleep 0.5
-	kill -HUP $pid 
+	kill -HUP $pid
 	wait $pid
 
 ) > /dev/null 2>&1
 
 cat $tmp | grep -E "\-> 0?$addr" | awk '{ print $1 }' | sort | uniq | \
 while read node; do
-	board=`telican -s $addr -c $node -e "show system" | grep 'Board' | \
+	board=`telican -s $addr -c $node -e "show system" 2>/dev/null | grep 'Board' | \
 		sed 's/Board : *//'`
 	sleep .3
-	uptime=`telican -s $addr -c $node -e "show uptime"`
+        mcu=`telican -s $addr -c $node -e "show system" 2>/dev/null | grep 'MCU' | \
+                sed 's/MCU : *//'`
+        sleep .3
+        ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null`
+        sleep .3
+	uptime=`telican -s $addr -c $node -e "show uptime" 2>/dev/null`
 	sleep .3
 	echo "$node:"
 	echo "       Typ: $board"
-	echo "       Up:  $uptime"
+        echo "       MCU: $mcu"
+        echo "       Up:  $uptime"
+	echo "       RAM:  $ram"
 done
 
 rm $tmp
