@@ -216,6 +216,46 @@ void transport_connection::flood_ping(uint16_t src, uint16_t dst,
 	}
 }
 
+void transport_connection::ping_once(uint16_t src, uint16_t dst)
+{
+	cout << "sending one ping packet from " << src << " to " 
+		<< dst << "..." << endl;
+
+	try
+	{
+#ifndef __WIN32__
+		struct timeval starttv,endtv;
+		gettimeofday(&starttv,0);
+#endif
+
+		send_PING_REQUEST(src,dst);
+		recv_PING_REPLAY(dst,src);
+
+#ifndef __WIN32__
+		gettimeofday(&endtv,0);
+
+		uint64_t diff = (endtv.tv_sec * 1000000 + endtv.tv_usec) -
+			(starttv.tv_sec * 1000000 + starttv.tv_usec);
+
+		cout << " [" << (1) << "] " << (diff / 1000) << " msec";
+#else
+		cout << " [" << (1) << "] ";
+#endif
+
+	}
+	catch (const transport_error &e)
+	{
+		// we are pinging, so ignore possible timeouts
+		keep_connection_alive();
+	}
+#ifndef __WIN32__
+	usleep (200000);
+#else
+	_sleep(200);
+#endif
+	cout << endl;
+}
+
 
 volatile bool done = false;
 
