@@ -79,10 +79,10 @@ hcan_transport.cc
 hcan_transport.h
 oap-def.h
 
-firmwares/controllerboard-1612-v01/devices.c
-firmwares/controllerboard-1612-v01/devices.h
-firmwares/controllerboard-1612-v01/devices/devices.xml
-firmwares/controllerboard-1612-v01/timer.c
+firmwares/controllerboard/devices.c
+firmwares/controllerboard/devices.h
+firmwares/controllerboard/devices/devices.xml
+firmwares/controllerboard/timer.c
 
 check_hcan/check_hcan
 hcan4mqttpc/hcan4mqttpc
