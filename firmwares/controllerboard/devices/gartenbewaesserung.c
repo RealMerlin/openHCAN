@@ -5,8 +5,7 @@
  *  Author: Martin
  */
 
-#include "gartenbewaesserung.h"
-#include "darlingtonoutput.h"
+#include "../../controllerboard/devices/gartenbewaesserung.h"
 #include <hcan.h>
 
 #include <canix/canix.h>
@@ -15,6 +14,8 @@
 #include <avr/interrupt.h>
 #include <avr/eeprom.h>
 #include <avr/wdt.h>
+
+#include "../../controllerboard/darlingtonoutput.h"
 
 void gartenbewaesserung_init(device_data_gartenbewaesserung *p, eds_block_p it) {}
 

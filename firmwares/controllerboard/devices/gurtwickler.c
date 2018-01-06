@@ -5,9 +5,9 @@
  *  Author: Martin
  */
 
-#include "gurtwickler.h"
-#include "darlingtonoutput.h"
-#include "tasterinput.h"
+#include "../../controllerboard/devices/gurtwickler.h"
+#include "../../controllerboard/darlingtonoutput.h"
+#include "../../controllerboard/input.h"
 
 #include <hcan.h>
 
@@ -62,8 +62,8 @@ inline void gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus
 	if (zyklus != 10) return; // 10tel-Sekunden-Zyklus verwendet
 	
 	// Läuft der Gurtwickler?
-	uint8_t status_up = tasterport_read(p->config.pin_motor_up); //High-Active
-	uint8_t status_down = tasterport_read(p->config.pin_motor_down); //High-Active
+	uint8_t status_up = inputport_read(1, p->config.pin_motor_up); //High-Active
+	uint8_t status_down = inputport_read(1, p->config.pin_motor_down); //High-Active
 	if (status_up == 1 && status_down == 0)
 	{
 		p->lowlevel_state = GURTWICKLER_STATE_AUF;

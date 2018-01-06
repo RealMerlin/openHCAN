@@ -5,7 +5,7 @@
  *  Author: Martin
  */
 
-#include "bewegungsmelder.h"
+#include "../../controllerboard/devices/bewegungsmelder.h"
 #include <hcan.h>
 #include <canix/canix.h>
 #include <canix/tools.h>
@@ -18,7 +18,7 @@
 #include <avr/eeprom.h>
 #include <avr/wdt.h>
 
-#include "tasterinput.h"
+#include "../../controllerboard/input.h"
 /*
 IDEE:
 Bewegunsgmelder sendet "HCAN_HES_TASTER_DOWN" nach dem ersten auslösen
@@ -59,7 +59,7 @@ inline void bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_
 	message.size = 4;
 
 	// Wenn der Bewegunsmelder ausgelöst hat, dann ist der Pin 0, ansonsten 1
-	uint8_t status = ! tasterport_read(p->config.port); //Low-Active
+	uint8_t status = ! inputport_read(1, p->config.port); //Low-Active
 	
 	if (status != p->oldState)
 	{
