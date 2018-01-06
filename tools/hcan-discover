@@ -18,21 +18,21 @@ POLITE_TIME=40
 
 cat $tmp | grep -E "\-> 0?$addr" | awk '{ print $1 }' | sort | uniq | \
 while read node; do
-	board=`telican -s $addr -c $node -e "show system" 2>/dev/null | grep 'Board' | \
-		sed 's/Board : *//'`
+	system=`telican -s $addr -c $node -e "show system" 2>/dev/null`
+	board=`echo "$system" | grep 'Board' | sed 's/Board : *//'`
+	mcu=`echo "$system" | grep 'MCU' | sed 's/MCU : *//'`
+	build=`echo "$system" | grep 'Build' | sed 's/Build #: *//'`
 	sleep .3
-        mcu=`telican -s $addr -c $node -e "show system" 2>/dev/null | grep 'MCU' | \
-                sed 's/MCU : *//'`
-        sleep .3
-        ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null`
-        sleep .3
+	ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null | sed 's/config ram usage: *//'`
+	sleep .3
 	uptime=`telican -s $addr -c $node -e "show uptime" 2>/dev/null`
-	sleep .3
+	
 	echo "$node:"
-	echo "       Typ: $board"
-        echo "       MCU: $mcu"
-        echo "       Up:  $uptime"
-	echo "       RAM:  $ram"
+	echo "       Typ:   $board"
+	echo "       MCU:   $mcu"
+	echo "       Build: $build"
+	echo "       Up:    $uptime"
+	echo "       RAM:   $ram"
 done
 
 rm $tmp
