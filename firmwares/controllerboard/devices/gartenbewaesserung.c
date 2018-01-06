@@ -74,7 +74,7 @@ void gartenbewaesserung_can_callback(device_data_gartenbewaesserung *p, const ca
 
 }
 
-// wird alle 1 sec aufgerufen, fuer jeden Bewässerungsstrang einmal
+// wird alle 1 sec aufgerufen, fuer jeden Bewaesserungsstrang einmal
 inline void gartenbewaesserung_timer_handler(device_data_gartenbewaesserung *p, uint8_t zyklus)
 {
 	if (zyklus != 1) return; // 10tel-Sekunden-Zyklus verwendet

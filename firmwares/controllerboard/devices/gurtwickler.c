@@ -61,7 +61,7 @@ inline void gurtwickler_timer_handler(device_data_gurtwickler *p, uint8_t zyklus
 {
 	if (zyklus != 10) return; // 10tel-Sekunden-Zyklus verwendet
 	
-	// Läuft der Gurtwickler?
+	// Laeuft der Gurtwickler?
 	uint8_t status_up = inputport_read(1, p->config.pin_motor_up); //High-Active
 	uint8_t status_down = inputport_read(1, p->config.pin_motor_down); //High-Active
 	if (status_up == 1 && status_down == 0)
@@ -140,7 +140,7 @@ void gurtwickler_can_callback(device_data_gurtwickler *p, const canix_frame *fra
 				}
 				else
 				{
-					// freie Position lässt sich noch nicht anfahren :(
+					// freie Position laesst sich noch nicht anfahren :(
 				}
 			}
 			else
@@ -199,7 +199,7 @@ void gurtwickler_lowlevel_timer_handler(device_data_gurtwickler *p)
 		switch (p->lowlevel_command)
 		{
 			case GURTWICKLER_COMMAND_AUF_TasteDown :
-			// Taste drücken
+			// Taste druecken
 			canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("Rolladen:%d_Taste_Down_druecken"), p->config.gruppe0);
 			p->lowlevel_command = GURTWICKLER_COMMAND_AUF_TasteUp;
 			darlingtonoutput_setpin(p->config.port_up, 1);	// auf VCC
@@ -207,7 +207,7 @@ void gurtwickler_lowlevel_timer_handler(device_data_gurtwickler *p)
 			break;
 		
 			case GURTWICKLER_COMMAND_AB_TasteDown :
-			// Taste drücken
+			// Taste druecken
 			canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("Rolladen:%d_Taste_Up_druecken"), p->config.gruppe0);
 			p->lowlevel_command = GURTWICKLER_COMMAND_AB_TasteUp;
 			darlingtonoutput_setpin(p->config.port_down, 1);	// auf VCC

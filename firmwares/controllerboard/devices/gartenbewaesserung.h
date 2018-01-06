@@ -23,12 +23,12 @@ typedef struct
 	eds_gartenbewaesserung_block_t config;
 	
 	/**
-	 * besagt, ob der Bewässerungsstrang an oder aus ist
+	 * besagt, ob der Bewaesserungsstrang an oder aus ist
 	 */
 	uint8_t state; // 0 = off, 1 = on
 	
 	/**
-	 * Zeit-Zaehler fuer Bewässerungssteuerung
+	 * Zeit-Zaehler fuer Bewaesserungssteuerung
 	 */
 	uint16_t timer_counter;
 	
@@ -37,7 +37,7 @@ typedef struct
 void gartenbewaesserung_init(device_data_gartenbewaesserung *p, eds_block_p it);
 
 /**
- * Liefert != 0, falls die Bewässerung in der genannten Gruppe ist
+ * Liefert != 0, falls die Bewaesserung in der genannten Gruppe ist
  */
 uint8_t bewaesserung_is_in_group(const device_data_gartenbewaesserung *p, uint8_t group);
 

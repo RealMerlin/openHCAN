@@ -21,10 +21,10 @@
 #include "../../controllerboard/input.h"
 /*
 IDEE:
-Bewegunsgmelder sendet "HCAN_HES_TASTER_DOWN" nach dem ersten auslösen
-Danach wird sekündlich "HCAN_HES_TASTER_DOWN" gesendet bis der Melder nicht mehr auslöst
+Bewegunsgmelder sendet "HCAN_HES_TASTER_DOWN" nach dem ersten ausloesen
+Danach wird sekuendlich "HCAN_HES_TASTER_DOWN" gesendet bis der Melder nicht mehr ausloest
 Dadurch wird sofort nach der Bewegung das Licht eingeschaltet.
-Und der Timer der Lichtzone immer wieder zurückgesetzt.
+Und der Timer der Lichtzone immer wieder zurueckgesetzt.
 -> nach der letzte Bewegung bleibt der Melder ca. 2 Sek im Aktiven Zustand + der Timer der Lichtzone ergibt die Nachleuchtzeit
 */
 
@@ -58,7 +58,7 @@ inline void bewegungsmelder_timer_handler(device_data_bewegungsmelder *p, uint8_
 	message.data[3] = p->config.port;
 	message.size = 4;
 
-	// Wenn der Bewegunsmelder ausgelöst hat, dann ist der Pin 0, ansonsten 1
+	// Wenn der Bewegunsmelder ausgeloest hat, dann ist der Pin 0, ansonsten 1
 	uint8_t status = ! inputport_read(1, p->config.port); //Low-Active
 	
 	if (status != p->oldState)
