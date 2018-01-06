@@ -347,7 +347,10 @@ void transport_connection::syslog()
 					// yes, there is already something; now add the
 					// string received
 
-					it->second.msg += f.data_as_string();
+					if(f.data_as_string()[0] == it->second.prio)
+						it->second.msg += f.data_as_string().substr(1);
+					else
+						it->second.msg += f.data_as_string();
 
 					// now check it the string we have built is complete:
 					const string s = it->second.msg;
@@ -382,7 +385,7 @@ void transport_connection::syslog()
 				else
 				{
 					// no, it is the first packet
-					messages[f.src()].msg = f.data_as_string();
+					messages[f.src()].msg = f.data_as_string().substr(1);
 					messages[f.src()].prio = f.data_as_string()[0];
 				}
 			}
