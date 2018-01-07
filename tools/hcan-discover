@@ -1,5 +1,25 @@
 #!/bin/bash
 
+while [ "$1" != '' ]
+	do
+		[ "$1" == "-a" ] && SHOWONLYADDR="true" && shift
+		[ "$1" == "-r" ] && SHOWRAM="true" && shift
+		[ "$1" == "-u" ] && SHOWUPTIME="true" && shift
+		[ "$1" == "-s" ] && SHOWSYSL="true" && shift
+		[ "$1" == "-h" ] && SHOWHELP="true" && shift
+done
+
+if [ "$SHOWHELP" == "true" ]
+then
+	echo "without arguments: Show only Typ, Board and the Build"
+	echo "  -a  Show only the addresses without any info"
+	echo "  -r  Show additionaly RAM usage per Board"
+	echo "  -u  Show additionaly the Uptime per Board"
+	echo "  -s  Show additionaly the Syslog Level per Board"
+	echo "  -h  Show only Help"
+	exit 0
+fi
+
 tmp=`mktemp`
 addr="640"
 POLITE_TIME=40
@@ -16,26 +36,42 @@ POLITE_TIME=40
 
 ) > /dev/null 2>&1
 
+if [ "$SHOWONLYADDR" == "true" ]
+then
+	cat $tmp | grep -E "\-> 0?$addr" | awk '{ print $1 }' | sort | uniq
+	exit 0
+fi
+
 cat $tmp | grep -E "\-> 0?$addr" | awk '{ print $1 }' | sort | uniq | \
 while read node; do
 	system=`telican -s $addr -c $node -e "show system" 2>/dev/null`
 	board=`echo "$system" | grep 'Board' | sed 's/Board : *//'`
 	mcu=`echo "$system" | grep 'MCU' | sed 's/MCU : *//'`
 	build=`echo "$system" | grep 'Build' | sed 's/Build #: *//'`
-	sleep .3
-	ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null | sed 's/config ram usage: *//'`
-	sleep .3
-	uptime=`telican -s $addr -c $node -e "show uptime" 2>/dev/null`
-	sleep .3
-	sysl=`telican -s $addr -c $node -e "show ee 5"`
 
 	echo "$node:"
 	echo "       Typ:   $board"
 	echo "       MCU:   $mcu"
 	echo "       Build: $build"
-	echo "       Up:    $uptime"
-	echo "       RAM:   $ram"
-	echo "       Sysl:  $sysl"
+
+	if [ "$SHOWRAM" == "true" ]
+	then
+		sleep .3
+		ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null | sed 's/config ram usage: *//'`
+		echo "       RAM:   $ram"
+	fi
+	if [ "$SHOWUPTIME" == "true" ]
+	then
+		sleep .3
+		uptime=`telican -s $addr -c $node -e "show uptime" 2>/dev/null`
+		echo "       Up:    $uptime"
+	fi
+	if [ "$SHOWSYSL" == "true" ]
+	then
+		sleep .3
+		sysl=`telican -s $addr -c $node -e "show ee 5"`
+		echo "       Sysl:  $sysl"
+	fi
 done
 
 rm $tmp
