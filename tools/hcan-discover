@@ -26,13 +26,16 @@ while read node; do
 	ram=`telican -s $addr -c $node -e "show ram-usage" 2>/dev/null | sed 's/config ram usage: *//'`
 	sleep .3
 	uptime=`telican -s $addr -c $node -e "show uptime" 2>/dev/null`
-	
+	sleep .3
+	sysl=`telican -s $addr -c $node -e "show ee 5"`
+
 	echo "$node:"
 	echo "       Typ:   $board"
 	echo "       MCU:   $mcu"
 	echo "       Build: $build"
 	echo "       Up:    $uptime"
 	echo "       RAM:   $ram"
+	echo "       Sysl:  $sysl"
 done
 
 rm $tmp
