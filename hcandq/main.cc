@@ -27,19 +27,28 @@ void print_frame(data_file_frame_entry &fe)
 	strftime(ts,sizeof(ts),"%c ",localtime(&tt)); // was: %X
 
 	if (interpret && (fe.proto == HCAN_PROTO_SFP) &&
-			(fe.data[0] == HCAN_SRV_HES) && 
+			(fe.data[0] == HCAN_SRV_HES) &&
 			(fe.data[1] == HCAN_HES_1WIRE_TEMPERATURE))
 	{
 		float temp;
 		temp = (int16_t)((fe.data[3]<< 8)|fe.data[4]) / 16.0;
-		cout << ts << " tempsensor: " << (uint16_t)fe.data[2] << " temp: " 
+		cout << ts << " tempsensor: " << (uint16_t)fe.data[2] << " temp: "
 			<< temp << std::endl;
 	}
+        else if (interpret && (fe.proto == HCAN_PROTO_SFP) &&
+                        (fe.data[0] == HCAN_SRV_HES) &&
+                        (fe.data[1] == HCAN_HES_HELLIGKEITS_INFO))
+        {
+                float brightness;
+                brightness = (int16_t)((fe.data[3]<< 8)|fe.data[4]);
+                cout << ts << " helligkeitssensor: " << (uint16_t)fe.data[2] << " helligkeit: "
+                        << brightness << std::endl;
+        }
 	else
 		f.print(numeric,color,string(ts));
 }
 
-void query_file(const string &file, 
+void query_file(const string &file,
 		const string &query_expression,
 		int last)
 {
