@@ -15,7 +15,7 @@
  *  with HCAN; if not, write to the Free Software Foundation, Inc., 51
  *  Franklin St, Fifth Floor, Boston, MA 02110-1301  USA
  *
- *  (c) 2016 Ingo Lages, i dot Lages (at) gmx (dot) de
+ *  (c) 2018 Ingo Lages, i dot Lages (at) gmx (dot) de
  */
 #include <syslog.h>
 #include <fcntl.h>
@@ -42,6 +42,9 @@ uint8_t canBufRIdx = 0;
 uint8_t mqttBufWIdx = 0;
 uint8_t mqttBufRIdx = 0;
 uint8_t debug = 0;
+uint8_t debugWay = 0;
+
+enum { eRxFromCb=0x01, eRxFromMqtt=0x10, eTx2cb=0x02, eTx2mqtt=0x20 };
 
 int parse_options(int argc, char ** argv)
 {
@@ -55,13 +58,16 @@ int parse_options(int argc, char ** argv)
                 strncpy(device,optarg,sizeof(device)-1);
                 fprintf(stderr,"serial can device: %s\n",device);
                 break;
+
             case 'c':
                 strncpy(brokerHost_ip,optarg,sizeof(brokerHost_ip)-1);
                 fprintf(stderr,"MQTT-Broker-Host-IP: %s\n",brokerHost_ip);
                 break;
+
             case 'D':
                 debug = 1;
                 break;
+
             case '?':
             case 'h':
             default:
@@ -76,10 +82,69 @@ int parse_options(int argc, char ** argv)
     return 0;
 }
 
+// write to canBuf
+static void rxFromCb(void)
+{
+	struct can_frame canFrame;
+	memset(&canFrame, 0, sizeof(struct can_frame)); // WICHTIG!
+	int nread = recv(sock_can, &canFrame, sizeof(struct can_frame), MSG_WAITALL); // read a frame from can
+	if (nread != sizeof(struct can_frame))
+	{
+		syslog(LOG_ERR, "could not read full packet from can, dropping...\n");
+		TRACE("could not read full packet from can, dropping...\n");
+		exit (1);
+	}
+	else if (msgOfInterest4broker(&canFrame))
+	{
+		canRxBuf[canBufWIdx].can_id = canFrame.can_id & CAN_EFF_MASK;
+		canRxBuf[canBufWIdx].can_dlc = canFrame.can_dlc;
+		memcpy(canRxBuf[canBufWIdx].data, canFrame.data, canFrame.can_dlc);
+
+		canBufWIdx++;
+		canBufWIdx &= BUFFERSIZE-1;
+	}
+	// else TRACE("not a msg for broker\n");
+}
+
+// read from canBuf
+static void tx2mqtt(void)
+{
+	char str[200];
+	memset(str, '\0', sizeof(str)); // WICHTIG!
+	int strLen = catHesTopic4Broker(str, &canRxBuf[canBufRIdx]);
+	if (0 < strLen)
+	{
+		TRACE("cb> mqtt %s\n", str);
+		publishMqttMsg("cb>", (unsigned char*)str, strLen); // topic "cb>" (vom CAN-Bus)
+	}
+}
+
+// read from mqttBuf
+static void tx2cb(void)
+{
+	int nwritten = write(sock_can, &mqttRxBuf[mqttBufRIdx], sizeof(struct can_frame));
+	if (nwritten == sizeof(struct can_frame))
+	{
+		if(debug)
+		{
+			// TEST-Ausgabe:
+			char str[200];
+			memset(str, '\0', sizeof(str)); // WICHTIG!
+			snprintf(str, 16, ".%x", (uint16_t)mqttRxBuf[mqttBufRIdx].can_id);
+			int i;
+			for (i=0; i<mqttRxBuf[mqttBufRIdx].can_dlc; i++)
+			{
+				snprintf(&str[strlen(str)], 16, ", %u", mqttRxBuf[mqttBufRIdx].data[i]);
+			}
+			TRACE("cb<--mqtt %s\n", str);
+		}
+	}
+	else
+		syslog(LOG_ERR,"could not send complete CAN packet: written=%d, data-size=%d!\n", nwritten, mqttRxBuf[mqttBufRIdx].can_dlc);
+}
+
 int main(int argc, char ** argv)
 {
-	int nwritten;
-
 	strcpy(device, "can0");
     strcpy(brokerHost_ip, "localhost"); // "192.168.1.78", "localhost", "m2m.eclipse.org"
 
@@ -98,10 +163,8 @@ int main(int argc, char ** argv)
     }
     struct ifreq canIfr;
     struct sockaddr_can canAddr;
-    struct can_frame canFrame;
-    memset(&canIfr, 0x0, sizeof(canIfr));
-    memset(&canAddr, 0x0, sizeof(canAddr));
-    memset(&canFrame, 0x0, sizeof(canFrame));
+    memset(&canIfr, 0, sizeof(canIfr));
+    memset(&canAddr, 0, sizeof(canAddr));
 
     strcpy(canIfr.ifr_name, device);
     ioctl(sock_can, SIOCGIFINDEX, &canIfr);
@@ -126,18 +189,14 @@ int main(int argc, char ** argv)
     fd_set recv_fdset;
     fd_set send_fdset;
     int max_fd;
-    int nread;
     struct timeval timeout;
     max_fd = sock_mqtt;
     if(sock_can > max_fd)
         max_fd = sock_can;
 
-    //publishMqttMsg("cb>", (unsigned char*)"START-2CB", strlen("START-2CB")); // topic "cb>" (vom CAN-Bus)
-
     while (1)
     {
-        int rtn;
-        timeout.tv_sec = 0;
+        timeout.tv_sec = 2;
         timeout.tv_usec = 500000;
         FD_ZERO(&recv_fdset);
         FD_ZERO(&send_fdset);
@@ -148,97 +207,66 @@ int main(int argc, char ** argv)
         if(canBufWIdx != canBufRIdx) FD_SET(sock_can, &send_fdset);
         if(mqttBufWIdx != mqttBufRIdx) FD_SET(sock_mqtt, &send_fdset);
 
-        rtn = select (max_fd+1, &recv_fdset, &send_fdset, NULL, &timeout);
-        if(rtn > 0) // no timeout
+        debugWay = 0;
+        int rtn = select (max_fd+1, &recv_fdset, &send_fdset, NULL, &timeout);
+        if(rtn > 0) // no timeout?
         {
             if (FD_ISSET(sock_can, &recv_fdset))
             {
-                // read a frame from can:
-            	memset(&canFrame, 0, sizeof(struct can_frame)); // WICHTIG!
-            	nread = recv(sock_can, &canFrame, sizeof(struct can_frame), MSG_WAITALL);
-                if (nread != sizeof(struct can_frame)) {
-                    syslog(LOG_ERR, "could not read full packet from can, dropping...\n");
-                    exit(1);
-                }
-                else
-                {
-                    if(((canBufWIdx+1)&(BUFFERSIZE-1)) == canBufRIdx)
-                    {
-                        TRACE("no rx-can-buffer left\n");
-                    }
-                    else if (msgOfInterest4broker(&canFrame))
-					{
-                    	canRxBuf[canBufWIdx].can_id = canFrame.can_id & CAN_EFF_MASK;
-						canRxBuf[canBufWIdx].can_dlc = canFrame.can_dlc;
-						memcpy(canRxBuf[canBufWIdx].data, canFrame.data, canFrame.can_dlc);
+        		if(((canBufWIdx+1)&(BUFFERSIZE-1)) == canBufRIdx) TRACE("no rx-can-buffer left\n");
+        		else
+        			rxFromCb();
 
-						canBufWIdx++;
-						canBufWIdx &= BUFFERSIZE-1;
-					}
-                    else
-                    {
-                    	//TRACE("not a msg for broker\n");
-                    }
-                }
+        		debugWay |= eRxFromCb;
             }
 
         	if (FD_ISSET(sock_mqtt, &recv_fdset))
             {
-        		if(((mqttBufWIdx+1)&(BUFFERSIZE-1)) == mqttBufRIdx)
-				{
-					 TRACE("no rx-mqtt-buffer left\n");
-				}
+        		if(((mqttBufWIdx+1)&(BUFFERSIZE-1)) == mqttBufRIdx) TRACE("no rx-mqtt-buffer left\n");
         		else
         		{
-        			recvMqttMsg(); // ggf. mqttBufWIdx++
+        			int rc = rxFromMqtt(); // ggf. mqttBufWIdx++
+        			if (rc == -1)
+        			{
+        				shutdown(sock_mqtt, SHUT_WR);
+        				recv(sock_mqtt, NULL, (size_t)0, 0);
+        				close(sock_mqtt);
+        				initMqtt(brokerHost_ip); // ...keepAliveInterval
+        			}
         		}
+
+        		debugWay |= eRxFromMqtt;
             }
 
-			if ((canBufWIdx != canBufRIdx) && FD_ISSET(sock_can, &send_fdset)) // something from 2send:  cb --> mqtt-broker?
+			if (canBufWIdx != canBufRIdx) // something to send:  cb -> mqtt-broker?
 			{
-				char str[200];
-				memset(str, '\0', sizeof(str)); // WICHTIG!
-				int strLen = catHesTopic4Broker(str, &canRxBuf[canBufRIdx]);
-				if (0 < strLen)
-				{
-					TRACE("cb> mqtt %s\n", str);
-					publishMqttMsg("cb>", (unsigned char*)str, strLen); // topic "cb>" (vom CAN-Bus)
-				}
-
+				tx2mqtt();
 				canBufRIdx++;
 				canBufRIdx &= BUFFERSIZE-1;
+
+				debugWay |= eTx2mqtt;
 			}
 
-			if ((mqttBufWIdx != mqttBufRIdx) && FD_ISSET(sock_mqtt, &send_fdset)) // something from 2send:  mqtt-broker --->  cb?
+			if (mqttBufWIdx != mqttBufRIdx) // something to send:  mqtt-broker ->  cb?
 			{
-				nwritten = write(sock_can, &mqttRxBuf[mqttBufRIdx], sizeof(struct can_frame));
-				if (nwritten == sizeof(struct can_frame))
-				{
-					if(debug)
-					{
-						// TEST-Ausgabe:
-						char str[200];
-						memset(str, '\0', sizeof(str)); // WICHTIG!
-						snprintf(str, 16, ".%x", (uint16_t)mqttRxBuf[mqttBufRIdx].can_id);
-						int i;
-						for (i=0; i<mqttRxBuf[mqttBufRIdx].can_dlc; i++)
-						{
-							snprintf(&str[strlen(str)], 16, ", %u", mqttRxBuf[mqttBufRIdx].data[i]);
-						}
-						TRACE("cb<--mqtt %s\n", str);
-					}
+				tx2cb();
+				mqttBufRIdx++;
+				mqttBufRIdx &= BUFFERSIZE-1;
 
-					mqttBufRIdx++;
-					mqttBufRIdx &= BUFFERSIZE-1;
-				}
-				else
-				{
-					syslog(LOG_ERR,"could not send complete CAN packet: written=%d, data-size=%d!\n", nwritten, mqttRxBuf[mqttBufRIdx].can_dlc);
-				}
+				debugWay |= eTx2cb;
         	}
-        }
-    }
 
+			if (debugWay) TRACE("select-rtn=%d 0x%x\n", rtn, debugWay);
+			else		  TRACE("select-rtn=%d\n", rtn);
+
+        }
+        else if (0 == rtn)
+        {
+        	TRACE("select-timeout\n");
+        }
+        else if (-1 == rtn) TRACE("select-errno=%d\n", errno);
+        else                TRACE("select-rtn=%d unerwartet\n", rtn);
+    }
 
     return 0;
 }

@@ -1,9 +1,9 @@
 socketCAN - MQTT-Paho-Client: HCAN-socketCAN <-> mqtt
 
 
-Installationsabhaendigkeiten: 
+Installationsabhaengigkeiten: 
 -----------------------------
-1. Der MQTTPaho-Client (Embedded MQTTPacket) benoetigt keine Shared lib. 
+1. Der MQTTPaho-Client (Embedded MQTTPacket) benoetigt keine Shared-Lib. 
 
 2. mosquitto MQTT-Broker (Datenvermittlungszentrale):
 sudo apt-get install mosquitto
@@ -17,4 +17,6 @@ Testmoeglichkeit z.B. per MQTTLens
 
 ...
 tt@bananapi:~/openHCAN/hcan4mqttcp$ ./hcan4mqttpc -D
+
+top -u tt
 ...
