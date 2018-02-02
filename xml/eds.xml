@@ -963,21 +963,6 @@
 		<field datatype="uint8_t" name="gruppe" pos="2" />
 	</block>
 
-	<block type="227" name="gurtwickler" size="14">
-		<field datatype="uint8_t" name="port_up" pos="0" />
-		<field datatype="uint8_t" name="port_down" pos="1" />
-		<field datatype="uint8_t" name="pin_motor_up" pos="2" />
-		<field datatype="uint8_t" name="pin_motor_down" pos="3" />
-		<field datatype="uint8_t" name="taster" pos="4" />
-		<field datatype="uint8_t" name="feature" pos="5" />
-		<field datatype="uint16_t" name="laufzeit" pos="6" />
-		<field datatype="uint16_t" name="max_rekalib" pos="8" />
-		<field datatype="uint8_t" name="gruppe0" pos="10" />
-		<field datatype="uint8_t" name="gruppe1" pos="11" />
-		<field datatype="uint8_t" name="gruppe2" pos="12" />
-		<field datatype="uint8_t" name="gruppe3" pos="13" />
-	</block>
-
 	<block type="228" name="ws2812a" size="4">
 		<field datatype="uint8_t" name="feature" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
