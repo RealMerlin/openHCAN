@@ -969,5 +969,10 @@
 		<field datatype="uint8_t" name="port" pos="2" />
 		<field datatype="uint8_t" name="anzLEDs" pos="3" />
 	</block>
+	
+	<block type="229" name="zustandsmeldung" size="2">
+		<field datatype="uint8_t" name="port" pos="0" />
+		<field datatype="uint8_t" name="gruppe" pos="1" />
+	</block>
 
 </eds-definitions>

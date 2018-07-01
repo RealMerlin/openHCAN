@@ -697,6 +697,13 @@
 			description="" >
 				<param pos="0" name="gruppe" description="" />
 			</message>
+			
+			<message name="ZUSTANDSMELDUNG" id="219"
+			description="" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="helligkeit" description="in Prozent" />
+				<param pos="1" name="frequenz" description="Blink Frequenz" />
+			</message>
 
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
