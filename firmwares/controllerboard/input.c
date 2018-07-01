@@ -32,7 +32,11 @@ uint8_t inputport_read(uint8_t pullup, uint8_t n)
 		return ports_getInput (n); // n-tes Bit abfragen
 	}
 #elif defined(__AVR_ATmega328P__) && defined(hcanMartin)
-	if (n <= 5)
+	if (expanderActive && (n == 4 || n == 5))
+	{
+		return 0; // expander @ PC4, PC5
+	}
+	else if (n <= 5)
 	{
 		// Pins 0-5 sind 1:1 von PORTC auszulesen
 
@@ -49,6 +53,10 @@ uint8_t inputport_read(uint8_t pullup, uint8_t n)
 		if(pullup) PORTB |= (1<< n);   // Pullup einschalten
 		else       PORTB &= ~ (1<< n); // Pullup ausschalten
 		return PINB & (1<< n);
+	}
+	else if (n < 244)
+	{
+		return ports_getInput (n); // n-tes Bit abfragen
 	}
 #elif defined(__AVR_ATmega328P__)
    	switch (n)
