@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <math.h>
 
 #include <boost/program_options.hpp>
 #include <boost/tokenizer.hpp>
@@ -119,6 +120,51 @@ void run_timed_mode(const po::variables_map &map)
 					tm->tm_mday,    // localtime() gives [1..31]
 					tm->tm_mon + 1, // localtime() gives [0..11]
 					tm->tm_year - 100);
+			sleep(1);
+
+			int dayOfYear = tm->tm_yday; //days since January 1  //Alternativ: int dayOfYear = (tm->tm_mon * 30) + tm->tm_mday;
+
+			////// Lokale Einstellungen
+
+			float OestlicheBreite =   9.76;
+			float NoerdlicheBreite = 49.00;
+			int Zeitzone = 1;
+			
+			//////
+
+			float Ort = M_PI * NoerdlicheBreite / 180;
+			float Deklination = 0.4095 * sin(0.016906 * (dayOfYear - 80.086));
+			float Sonnenaufgang = -0.0145;
+			float Zeitdifferenz = 12*acos((sin(Sonnenaufgang) - sin(Ort)*sin(Deklination)) / (cos(Ort)*cos(Deklination)))/M_PI;
+
+			float Sonnenaufgang_WOZ = 12 - Zeitdifferenz;
+			float Sonnenuntergang_WOZ = 12 + Zeitdifferenz;
+
+			float Zeitgleichung = -0.171*sin(0.0337*dayOfYear + 0.465) - 0.1299*sin(0.01787*dayOfYear - 0.168);
+
+			float Sonnenaufgang_MOZ = Sonnenaufgang_WOZ - Zeitgleichung;
+			float Sonnenuntergang_MOZ = Sonnenuntergang_WOZ - Zeitgleichung;
+
+			if(tm->tm_isdst) Zeitzone = Zeitzone + 1; //sommerzeit
+
+			float Sonnenaufgang_MEZ = Sonnenaufgang_MOZ - OestlicheBreite / 15 + Zeitzone; //7.838
+			float Sonnenuntergang_MEZ = Sonnenuntergang_MOZ - OestlicheBreite / 15 + Zeitzone; //7.838
+
+			double sunset = Sonnenaufgang_MEZ; //(1136-153*cos((dayOfYear+8)/58.09)) / 60;
+			double sundown = Sonnenuntergang_MEZ; //(405+90*cos((dayOfYear+8)/58.09)) / 60;
+
+			int sunset_hour = sunset;
+			int sundown_hour = sundown;
+			sunset = sunset - sunset_hour;
+			sundown = sundown - sundown_hour;
+			int sunset_minute = (double) sunset * 60;
+			int sundown_minute = (double) sundown * 60;
+
+			con.send_SUNSET_SUNDOWN_INFO(
+					HCAN_MULTICAST_INFO, HCAN_MULTICAST_INFO,
+					0,
+					sunset_hour, sunset_minute,
+					sundown_hour, sundown_minute);
 		}
 		sleep(1);
 	}
