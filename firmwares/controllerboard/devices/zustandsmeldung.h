@@ -20,6 +20,6 @@ typedef struct
 
 void zustandsmeldung_init(device_data_zustandsmeldung *p, eds_block_p it);
 void zustandsmeldung_can_callback(device_data_zustandsmeldung *p, const canix_frame *frame);
-inline void zustandsmeldung_timer_handler(device_data_zustandsmeldung *p, uint8_t zyklus);
+extern void zustandsmeldung_timer_handler(device_data_zustandsmeldung *p, uint8_t zyklus);
 
 #endif

@@ -969,8 +969,15 @@
 		<field datatype="uint8_t" name="port" pos="2" />
 		<field datatype="uint8_t" name="anzLEDs" pos="3" />
 	</block>
-	
-	<block type="229" name="zustandsmeldung" size="2">
+
+	<block type="229" name="am2302" size="4">
+		<field datatype="uint8_t" name="io_port" pos="0" />
+		<field datatype="uint8_t" name="gruppe" pos="1" />
+		<field datatype="uint8_t" name="interval" pos="2" />
+		<field datatype="uint8_t" name="modus" pos="3" />
+	</block>
+
+	<block type="230" name="zustandsmeldung" size="2">
 		<field datatype="uint8_t" name="port" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
 	</block>

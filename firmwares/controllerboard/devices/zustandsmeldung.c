@@ -31,7 +31,7 @@ void zustandsmeldung_set_pwm(device_data_zustandsmeldung *p, uint8_t modus)
 	{
 		p->frequenz = 0;
 	}
-	else if (modus == 1) // dauer an
+	else if (modus == 1) // aus (LED dauer an)
 	{
 		p->frequenz = 1;
 	}
