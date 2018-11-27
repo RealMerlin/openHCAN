@@ -736,6 +736,15 @@
 				description="Fragt das aktuelle Datum: Replay ist DATE_INFO" >
 			</message>
 
+			<message name="SUNSET_SUNDOWN_INFO" id="5"
+				description="Meldet die aktuelle Sonnenauf und Untergangszeit" >
+				<param pos="0" name="level" description="Date Level; regelt den Master-/Slave Betrieb" />
+				<param pos="1" name="hour_sunset" description="Stunde [0..23] Sonnenaufgang" />
+				<param pos="2" name="minute_sunset" description="Minute [0..59] Sonnenaufgang" />
+				<param pos="3" name="hour_sundown" description="Stunde [0..23] Sonnenuntergang" />
+				<param pos="4" name="minute_sundown" description="Minute [0..59] Sonnenuntergang" />
+			</message>
+
 		</service>
 
 		<service name="EDS" description="EEPROM Data System Service" id="7">

@@ -975,4 +975,21 @@
 		<field datatype="uint8_t" name="gruppe" pos="1" />
 	</block>
 
+	<block type="231" name="zeitschaltuhr_astro" size="5">
+		<field datatype="uint8_t" name="power_gruppe" pos="0" />
+		<field datatype="uint8_t" name="automatikEin_schalter_gruppe" pos="1" />
+		<field datatype="uint8_t" name="feature" pos="3" />
+		<field datatype="uint8_t" name="offset_sunset" pos="3" />
+		<field datatype="uint8_t" name="offset_sundown" pos="4" />
+		Die Astro Zeitschaltuhr schaltet die Verbraucher der power_gruppe
+		in vor bzw. nach dem Sonnenauf oder Untergang. Mit dem automatikEin-Schalter
+		kann die Automatik deaktiviert werden.
+		offset in Minuten
+
+		Feature Bits (Aktivierung durch Setzen):
+		Bit 0: 	off: nach Sonnenuntergang ein, nach Sonnenaufgang aus		on: nach Sonnenuntergang aus, nach Sonnenaufgang ein
+		Bit 1: 	off: offset_sunset positiv									on: offset_sunset negativ
+		Bit 2: 	off: offset_sundown negativ									on: offset_sundown positiv
+	</block>
+
 </eds-definitions>
