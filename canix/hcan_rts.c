@@ -125,6 +125,27 @@ void canix_SFP_RTS_handler(const canix_frame *frame)
 			}
 			break;
 
+		case HCAN_RTS_SUNSET_SUNDOWN_INFO :
+			{
+				/*
+				 * Dieses Frame wird normalerweise auf der HCAN_MULTICAST_RCS
+				 * Adresse empfangen:
+				 *
+				 * data[2] : level
+				 * data[3] : sunset hour
+				 * data[4] : sunset minute
+				 * data[5] : sundown hour
+				 * data[6] : sundown minute
+				 *
+				 */
+
+				canix_rtc_clock.sunset_hour = frame->data[3];
+				canix_rtc_clock.sunset_minute = frame->data[4];
+				canix_rtc_clock.sundown_hour   = frame->data[5];
+				canix_rtc_clock.sundown_minute = frame->data[6];
+			}
+			break;
+
 	};
 }
 
