@@ -35,6 +35,15 @@ typedef struct
 	 * */
 	uint8_t year;
 
+	/** Sonneaufgang Stunde: 0..23 */
+	uint8_t sunset_hour;
+	/** Sonneaufgang Minute: 0..59 */
+	uint8_t sunset_minute;
+	/** Sonnenuntergang Stunde: 0..23 */
+	uint8_t sundown_hour;
+	/** Sonnenuntergang Minute: 0..59 */
+	uint8_t sundown_minute;
+
 } canix_rtc_clock_t;
 
 extern volatile canix_rtc_clock_t canix_rtc_clock;

@@ -146,7 +146,7 @@ int main()
 						}
 						else
 						{
-							syslog(LOG_ERR,"Error sending address %d client\n",new_address);	
+							syslog(LOG_ERR,"Error sending address %d client\n",new_address);
 						}
 					}
 				}

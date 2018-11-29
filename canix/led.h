@@ -21,7 +21,7 @@
 #ifndef CANIX_LED_H
 #define CANIX_LED_H
 
-#if defined(__AVR_ATmega32__)
+#if defined(__AVR_ATmega32__) || (__AVR_ATmega644P__)
 #define CANIX_LED_YELLOW 1
 #define CANIX_LED_RED    2
 #define LED_PORT PORTB
