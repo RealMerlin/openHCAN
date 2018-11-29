@@ -54,7 +54,16 @@ uint8_t inputport_read(uint8_t pullup, uint8_t n)
 		else       PORTB &= ~ (1<< n); // Pullup ausschalten
 		return PINB & (1<< n);
 	}
-	else if (n < 244)
+	else if (n == 8)
+	{
+		// Pin 8 ist PD7
+		n = n - 1; // Modus Input setzen
+		DDRD &= ~ (1<< n); // Modus Input setzen
+		if(pullup) PORTD |= (1<< n);   // Pullup einschalten
+		else       PORTD &= ~ (1<< n); // Pullup ausschalten
+		return PIND & (1<< n);
+	}
+	else
 	{
 		return ports_getInput (n); // n-tes Bit abfragen
 	}
