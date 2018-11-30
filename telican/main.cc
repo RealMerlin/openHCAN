@@ -312,7 +312,7 @@ void handle_given_options (const po::parsed_options &options,
 		con.flood_ping(src, dst,100);
 		exit(0);
 	}
-	
+
 	if (map.count("pingonce"))
 	{
 		// bei ping muss die Zeit gemessen werden; hier keinen Polite
