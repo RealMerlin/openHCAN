@@ -62,8 +62,14 @@ void heizung_update_heizstop(device_data_heizung *p)
 {
 	if (p->reed_heiz_stop_counter)
 	{
-		canix_syslog_P(SYSLOG_PRIO_DEBUG,
+		// Meldung seltener verschicken.
+		// Meldung wird nun immer verschickt nachdem der
+		// reed_heiz_stop_counter zurueckgesetzt wurde.
+		if(p->reed_heiz_stop_counter == 59)
+		{
+			canix_syslog_P(SYSLOG_PRIO_DEBUG,
 				PSTR("Heizstop aktiv (id=%d)"), p->config.id);
+		}
 
 		// Heizung ganz ausschalten
 		p->pwm_end = p->config.pwm_periode;
