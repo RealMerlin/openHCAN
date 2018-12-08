@@ -56,7 +56,7 @@ clean:
 	make cppDienste xx="sudo make clean"
 	make firmware xx="sudo make clean" parm2=MCU=atmega328p
 	make firmware xx="sudo make clean" parm2=MCU=atmega32
-#	make firmware xx="sudo make clean" parm2=MCU=atmega644p
+	make firmware xx="sudo make clean" parm2=MCU=atmega644p
 #	make firmwareOhneEds xx="sudo make clean"
 	make tools xx="sudo make clean"
 	@# folgendes wuerde den "Dropbox-Pfad" erzwingen:  cd hcanhab2_mqtt; make clean
@@ -110,6 +110,7 @@ firmware:
 	cd hcanbl; $(xx) $(parm2)
 	cd firmwares/controllerboard; $(xx) $(parm2)
 #	cd firmwares/userpanel-v01; $(xx) $(parm2)
+	cd firmwares/ws2812-modul; $(xx) $(parm2)
 
 firmwareOhneEds:
 #	cd firmwares/usv-modul; $(xx)

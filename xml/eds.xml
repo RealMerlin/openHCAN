@@ -963,11 +963,12 @@
 		<field datatype="uint8_t" name="gruppe" pos="2" />
 	</block>
 
-	<block type="228" name="ws2812a" size="4">
+	<block type="228" name="ws2812b" size="5">
 		<field datatype="uint8_t" name="feature" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
 		<field datatype="uint8_t" name="port" pos="2" />
 		<field datatype="uint8_t" name="anzLEDs" pos="3" />
+		<field datatype="uint8_t" name="mute" pos="6" />
 	</block>
 
 	<block type="229" name="am2302" size="4">
