@@ -33,6 +33,7 @@ CFLAGS += -I. -I../../canix -I../.. -I../../include
 CFLAGS += $(DEFINES)
 
 all:
+	mkdir -p ./devices/
 	cp ../controllerboard/devices/devicePool/ws2812b.* ./devices/
 	cp ../controllerboard/devices/powerport.* ./devices/
 	cp ../controllerboard/devices/ports.* ./devices/
@@ -46,15 +47,16 @@ all:
 	cp ../controllerboard/darlingtonoutput.* ./
 	cp ../controllerboard/input.* ./
 	cp ../controllerboard/twimaster.* ./
+	cp ../controllerboard/buildver ./
 	cd devices; make all
 	make allX
-	
+
 allX: $(TARGET).hex
 	mkdir -p $(MCU_DIR)
 	sudo mv $(TARGET).hex ./$(MCU_DIR)
 
 $(TARGET).hex: $(TARGET).elf
-	$(OBJCOPY) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex 
+	$(OBJCOPY) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex
 	avr-size $(TARGET).hex
 
 $(TARGET).elf:
