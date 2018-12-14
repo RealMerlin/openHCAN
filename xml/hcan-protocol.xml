@@ -683,7 +683,7 @@
 				<param pos="5" name="seconds" description="" />
 			</message>
 
-			<message name="WS2812A_SEND" id="217"
+			<message name="WS2812B_SEND" id="217"
 				description="" >
 				<param pos="0" name="gruppe" description="" />
 				<param pos="1" name="Pattern" description="" />
@@ -693,7 +693,7 @@
 				<param pos="5" name="BenutzeLEDsPattern" description="" />
 			</message>
 
-			<message name="WS2812A_REPLAY" id="218"
+			<message name="WS2812B_REPLAY" id="218"
 			description="" >
 				<param pos="0" name="gruppe" description="" />
 			</message>
