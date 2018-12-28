@@ -43,9 +43,9 @@
 
 struct cRGB led[maxLEDs];
 
-void inline ws2812_setleds(struct cRGB *ledarray, uint16_t leds, uint8_t pin)
+void inline ws2812_setleds(device_data_ws2812b *p)
 {
-	ws2812_setleds_pin(ledarray,leds, _BV(pin));
+	ws2812_setleds_pin(p->led,p->config.anzLEDs, _BV(p->config.port));
 }
 
 void inline ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds, uint8_t pinmask)
@@ -118,21 +118,22 @@ void inline ws2812_setleds_pin(struct cRGB *ledarray, uint16_t leds, uint8_t pin
 
 void inline ws2812_sendarray_mask(uint8_t *data,uint16_t datlen,uint8_t maskhi)
 {
-  uint8_t curbyte,ctr,masklo;
-  uint8_t sreg_prev;
+	uint8_t curbyte,ctr,masklo;
+	uint8_t sreg_prev;
 
-  masklo	=~maskhi&PORTD;
-  maskhi |=        PORTD;
-  sreg_prev=SREG;
-  cli();
+	masklo	=~maskhi&PORTD;
+	maskhi |=        PORTD;
+	sreg_prev=SREG;
+	cli();
 
-  while (datlen--) {
-    curbyte=*data++;
+	while (datlen--)
+	{
+		curbyte=*data++;
 
-    asm volatile(
-    "       ldi   %0,8  \n\t"
-    "loop%=:            \n\t"
-    "       out   %2,%3 \n\t"    //  '1' [01] '0' [01] - re
+		asm volatile(
+		"       ldi   %0,8  \n\t"
+		"loop%=:            \n\t"
+		"       out   %2,%3 \n\t"    //  '1' [01] '0' [01] - re
 #if (w1_nops&1)
 w_nop1
 #endif
@@ -148,9 +149,9 @@ w_nop8
 #if (w1_nops&16)
 w_nop16
 #endif
-    "       sbrs  %1,7  \n\t"    //  '1' [03] '0' [02]
-    "       out   %2,%4 \n\t"    //  '1' [--] '0' [03] - fe-low
-    "       lsl   %1    \n\t"    //  '1' [04] '0' [04]
+		"       sbrs  %1,7  \n\t"    //  '1' [03] '0' [02]
+		"       out   %2,%4 \n\t"    //  '1' [--] '0' [03] - fe-low
+		"       lsl   %1    \n\t"    //  '1' [04] '0' [04]
 #if (w2_nops&1)
   w_nop1
 #endif
@@ -166,7 +167,7 @@ w_nop16
 #if (w2_nops&16)
   w_nop16
 #endif
-    "       out   %2,%4 \n\t"    //  '1' [+1] '0' [+1] - fe-high
+		"       out   %2,%4 \n\t"    //  '1' [+1] '0' [+1] - fe-high
 #if (w3_nops&1)
 w_nop1
 #endif
@@ -182,21 +183,21 @@ w_nop8
 #if (w3_nops&16)
 w_nop16
 #endif
+		"       dec   %0    \n\t"    //  '1' [+2] '0' [+2]
+		"       brne  loop%=\n\t"    //  '1' [+3] '0' [+4]
+		:	"=&d" (ctr)
+		:	"r" (curbyte), "I" (_SFR_IO_ADDR(PORTD)), "r" (maskhi), "r" (masklo)
+		);
+	}
 
-    "       dec   %0    \n\t"    //  '1' [+2] '0' [+2]
-    "       brne  loop%=\n\t"    //  '1' [+3] '0' [+4]
-    :	"=&d" (ctr)
-    :	"r" (curbyte), "I" (_SFR_IO_ADDR(PORTD)), "r" (maskhi), "r" (masklo)
-    );
-  }
-
-  SREG=sreg_prev;
+	SREG=sreg_prev;
 }
 
 void ws2812b_init(device_data_ws2812b *p, eds_block_p it)
 {
 	setAll(p, 0, 0, 0, 1, 0);
 	p->mute = 0;
+	p->poti_farbe = 0;
 }
 
 inline void ws2812b_timer_handler(device_data_ws2812b *p, uint8_t zyklus)
@@ -208,69 +209,96 @@ void setAll(device_data_ws2812b *p, uint8_t intensityR, uint8_t intensityG, uint
 {
 	if(useLEDs == 0) return;
 	uint8_t i = 0;
+	p->status = 0;
 	while(i < p->config.anzLEDs)
 	{
 		if(i % useLEDs != 0)
 		{
 			if(unusedLEDs == 0)
 			{
-				led[i].r=0;
-				led[i].g=0;
-				led[i].b=0;
+				p->led[i].r=0;
+				p->led[i].g=0;
+				p->led[i].b=0;
 			}
 		}
 		else
 		{
-			led[i].r=intensityR;
-			led[i].g=intensityG;
-			led[i].b=intensityB;
+			p->led[i].r=intensityR;
+			p->led[i].g=intensityG;
+			p->led[i].b=intensityB;
+		}
+		if (p->led[i].r > 0 || p->led[i].g > 0 || p->led[i].b > 0)
+		{
+			p->status = 1;
 		}
 		i++;
 	}
+	ws2812_setleds(p);
+}
 
-	// Status setzen, damit man per TASTER_DOWN aus bzw. einschalten kann.
-	if(intensityR == 0 && intensityG == 0 && intensityB == 0)
+void setOneColor(device_data_ws2812b *p, uint8_t color, uint8_t intensity, uint8_t useLEDs, uint8_t unusedLEDs)
+{
+	if(useLEDs == 0) return;
+	uint8_t i = 0;
+	p->status = 0;
+	while(i < p->config.anzLEDs)
 	{
-		p->status = 0;
+		if(i % useLEDs != 0)
+		{
+			if(unusedLEDs == 0)
+			{
+				if(color == COLOR_RED) p->led[i].r=0;
+				else if(color == COLOR_GREEN) p->led[i].g=0;
+				else if(color == COLOR_BLUE) p->led[i].b=0;
+			}
+		}
+		else
+		{
+			if(color == COLOR_RED) p->led[i].r=intensity;
+			else if(color == COLOR_GREEN) p->led[i].g=intensity;
+			else if(color == COLOR_BLUE) p->led[i].b=intensity;
+		}
+		if (p->led[i].r > 0 || p->led[i].g > 0 || p->led[i].b > 0)
+		{
+			p->status = 1;
+		}
+
+		i++;
 	}
-	else
-	{
-		p->status = 1;
-	}
-	ws2812_setleds(led, p->config.anzLEDs, p->config.port);
+	ws2812_setleds(p);
 }
 
 void ws2812b_toggle(device_data_ws2812b *p)
 {
-        if (p->status) // ws218b ist aktiv
-        {
-			setAll(p, 0, 0, 0, 1, 0);
-        }
-        else
-        {
-			setAll(p, 255, 255, 255, 1, 0);
-        }
+	if (p->status) // ws218b ist aktiv
+	{
+		setAll(p, 0, 0, 0, 1, 0);
+	}
+	else
+	{
+		setAll(p, 255, 255, 255, 1, 0);
+	}
 }
 
 static uint8_t is_in_group(const device_data_ws2812b *p, uint8_t group)
 {
-        uint8_t i;
-        uint8_t *gruppen;
-        uint8_t maxDeviceGruppen = MAX_WS2812B_GROUPS;
+		uint8_t i;
+		uint8_t *gruppen;
+		uint8_t maxDeviceGruppen = MAX_WS2812B_GROUPS;
 
-        // die 255 ist der Ersatzwert und wird ignoriert!
-        if (group == 255)
-                return 0;
+		// die 255 ist der Ersatzwert und wird ignoriert!
+		if (group == 255)
+				return 0;
 
-        gruppen = (uint8_t *) &(p->config.gruppe);
+		gruppen = (uint8_t *) &(p->config.gruppe0);
 
-        for (i = 0; i < maxDeviceGruppen; i++)
-        {
-                if (gruppen[i] == group)
-                        return 1;
-        }
+		for (i = 0; i < maxDeviceGruppen; i++)
+		{
+				if (gruppen[i] == group)
+						return 1;
+		}
 
-        return 0;
+		return 0;
 }
 
 void ws2812b_can_callback(device_data_ws2812b *p, const canix_frame *frame)
@@ -297,42 +325,77 @@ void ws2812b_can_callback(device_data_ws2812b *p, const canix_frame *frame)
 				}
 				break;
 			case HCAN_HES_TASTER_DOWN :
-                                if (!p->mute) ws2812b_toggle(p);
-                                break;
-                        case HCAN_HES_POWER_GROUP_ON :
-                        case HCAN_HES_SCHALTER_ON :
-                                if (!p->mute) setAll(p, 255, 255, 255, 1, 0); //es soll eingeschaltet werden
-                                break;
-                        case HCAN_HES_POWER_GROUP_OFF :
-                        case HCAN_HES_SCHALTER_OFF :
-                                if (!p->mute) setAll(p, 0, 0, 0, 1, 0); //es soll abgeschaltet werden
-                                break;
-                        case HCAN_HES_POWER_GROUP_STATE_QUERY :
-                                {
-                                        answer.data[1] =
-                                                HCAN_HES_POWER_GROUP_STATE_REPLAY;
-                                        answer.data[2] = frame->data[2];
-                                        answer.data[3] = p->status;
-                                        answer.data[4] = 0;
-                                        answer.size = 5;
-                                        canix_frame_send_with_prio(&answer,HCAN_PRIO_HI);
-                                }
-                                break;
+				if (!p->mute) ws2812b_toggle(p);
+				break;
+			case HCAN_HES_POWER_GROUP_ON :
+			case HCAN_HES_SCHALTER_ON :
+				if (!p->mute) setAll(p, 255, 255, 255, 1, 0); //es soll eingeschaltet werden
+				break;
+			case HCAN_HES_POWER_GROUP_OFF :
+			case HCAN_HES_SCHALTER_OFF :
+				if (!p->mute) setAll(p, 0, 0, 0, 1, 0); //es soll abgeschaltet werden
+				break;
+			case HCAN_HES_POWER_GROUP_STATE_QUERY :
+				answer.data[1] = HCAN_HES_POWER_GROUP_STATE_REPLAY;
+				answer.data[2] = frame->data[2];
+				answer.data[3] = p->status;
+				answer.data[4] = 0;
+				answer.size = 5;
+				canix_frame_send_with_prio(&answer,HCAN_PRIO_HI);
+				break;
 		}
 	}
 	else if (HCAN_HES_DEVICE_STATES_REQUEST == frame->data[1])
 	{
-		if(p->config.gruppe != 255)
+		if(p->config.gruppe0 != 255)
 		{
 			wdt_reset();
 			canix_sleep_100th(10); // 100msec Pause
 
 			answer.data[1] = HCAN_HES_POWER_GROUP_STATE_REPLAY;
-			answer.data[2] = p->config.gruppe; // wird in main.c fuer jedes Device einmal aufgerufen
+			answer.data[2] = p->config.gruppe0; // wird in main.c fuer jedes Device einmal aufgerufen
 			answer.data[3] = p->status;
 			answer.data[4] = 0;
 			answer.size = 5;
 			canix_frame_send_with_prio(&answer,HCAN_PRIO_HI);
+		}
+	}
+	else if(frame->data[1] == HCAN_HES_POTI_POS_CHANGED)
+	{
+		uint16_t adcValue = (frame->data[3] << 8) + frame->data[4];
+		if ( frame->data[2] == p->config.poti_farb_gruppe )
+		{
+			if (adcValue <= 256)
+			{
+				p->poti_farbe = COLOR_RED;
+			}
+			else if(adcValue <= 512)
+			{
+				p->poti_farbe = COLOR_GREEN;
+			}
+			else if(adcValue <= 768)
+			{
+				p->poti_farbe = COLOR_BLUE;
+			}
+			else
+			{
+				p->poti_farbe = COLOR_WHITE;
+			}
+			canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("POTI COLOR: %d"), p->poti_farbe);
+		}
+		else if ( frame->data[2] == p->config.poti_helligkeits_gruppe )
+		{
+			uint8_t helligekeit = (adcValue >> 2);
+			if (p->config.feature & (1<<WS2812B_FEATURE_ONLYWHITE)) p->poti_farbe = COLOR_WHITE;
+			if (p->poti_farbe == COLOR_WHITE)
+			{
+				if (!p->mute) setAll(p, helligekeit, helligekeit, helligekeit, 1, 0); // Weiss
+			}
+			else
+			{
+				if (!p->mute) setOneColor(p, p->poti_farbe, helligekeit, 1, 0); // Einzelfarbe aendern/setzen
+			}
+			canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("POTI COLOR: %d POTI INTENSITY: %d"), p->poti_farbe, helligekeit);
 		}
 	}
 

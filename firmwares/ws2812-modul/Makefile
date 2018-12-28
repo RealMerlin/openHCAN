@@ -2,6 +2,7 @@
 # 
 .PHONY:	release
 include ../../ARCH.inc
+#SHELL := /bin/bash
 
 SRC = $(patsubst %.c, %.c , $(wildcard *.c))
 SRC += $(patsubst %.c, %.c , $(wildcard ./devices/*.c))
@@ -33,10 +34,11 @@ CFLAGS += -I. -I../../canix -I../.. -I../../include
 CFLAGS += $(DEFINES)
 
 all:
-	mkdir -p ./devices/
-	cp ../controllerboard/devices/devicePool/ws2812b.* ./devices/
 	cp ../controllerboard/devices/powerport.* ./devices/
 	cp ../controllerboard/devices/ports.* ./devices/
+	cp ../controllerboard/devices/taster.* ./devices/
+	cp ../controllerboard/devices/poti.* ./devices/
+	cp ../controllerboard/devices/multitaster.* ./devices/
 	cp ../controllerboard/devices/mk_devices_h.xsl ./devices/
 	cp ../controllerboard/devices/mk_devices_c.xsl ./devices/
 	cp ../controllerboard/devices/mk_timer_c.xsl ./devices/
@@ -68,8 +70,8 @@ clean_part:
 clean:
 	make clean_part
 	sudo rm -fR ./$(MCU_DIR)
-	sudo rm -f devices.c devices.h timer.c
-	cd devices; rm -f *
+	find ./ -maxdepth 1 -type f \( ! -iname "main.c" ! -iname "Makefile" \) -delete
+	cd devices && find ./ -maxdepth 1 -type f \( ! -iname "ws2812b.c" ! -iname "ws2812b.h" \) -delete
 
 load:
 	make all
@@ -85,6 +87,3 @@ enableDebugWIRE_atmega328p:
 disableDebugWIRE_atmega328p:
 	@# moeglich:  atmelice, atmelice_isp, atmelice_dw
 	avrdude -c atmelice_dw -p $(MCU) -P usb -U hfuse:w:0xC8:m
-	
-	
-
