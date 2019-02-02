@@ -158,6 +158,10 @@
 		<field datatype="uint8_t" name="timer_delay" pos="8" />
 		<field datatype="uint8_t" name="action_gruppe0" pos="9" />
 		<field datatype="uint8_t" name="action_gruppe1" pos="10" />
+		<field datatype="uint8_t" name="feature" pos="11" />
+		Feature Bits (Aktivierung durch Setzen):
+		Bit 0:  Toggle Taster schaltete auch bei Timer aus. Normal setzt der Taster den Timer zurueck
+		Bit 1: 	fuer ExtOn lange gedrueck halten (akt. 3 Sek)
 	</block>
 
 	<block type="18" name="zeitzone" size="6">
@@ -976,16 +980,16 @@
 	</block>
 
 	<block type="229" name="am2302" size="4">
-		<field datatype="uint8_t" name="io_port" pos="0" />
+		<field datatype="uint8_t" name="io_pin" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
 		<field datatype="uint8_t" name="interval" pos="2" />
-		<field datatype="uint8_t" name="modus" pos="3" />
+		<field datatype="uint8_t" name="feature" pos="3" />
 	</block>
 
-	<block type="230" name="zustandsmeldung" size="2">
+<!--	<block type="230" name="zustandsmeldung" size="2">
 		<field datatype="uint8_t" name="port" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
-	</block>
+	</block>-->
 
 	<block type="231" name="zeitschaltuhr_astro" size="5">
 		<field datatype="uint8_t" name="power_gruppe" pos="0" />
