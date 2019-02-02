@@ -25,6 +25,9 @@
 #include <eds-structs.h>
 
 #define POTI_VALUE_TOLERANCE 30 //min. Toleranz, damit ein der Potiwert als veraendert gilt
+#define POTI_VALUE_TOLERANCE_FINE 10
+
+#define POTI_FEATURE_TOLERANCE_FINE   0 // Bit0 (the LSB)
 
 /* Anzahl Perioden fuer die der Potiwert konstant sein muss, 
  * damit eine neue Potinachricht versendet wird. Mindestprojektierung = 1 */

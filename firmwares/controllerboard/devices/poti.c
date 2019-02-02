@@ -138,8 +138,14 @@ inline void poti_timer_handler(device_data_poti *p, uint8_t zyklus)
 	{
 		/* Abfrage, ob sich der ADC-Wert signifikant aenderte,
 		 * gegenueber dem Wert im letzten Potitelegramm (Filterung): */
-		if ( ( currentADCvalue > (p->lastPotiValue + POTI_VALUE_TOLERANCE) ) ||
-			 ( currentADCvalue < (p->lastPotiValue - POTI_VALUE_TOLERANCE) ) )
+		uint8_t tolerance = POTI_VALUE_TOLERANCE;
+		if (p->config.feature & (1<<POTI_FEATURE_TOLERANCE_FINE))
+		{
+			tolerance = POTI_VALUE_TOLERANCE_FINE;
+		}
+
+		if ( ( currentADCvalue > (p->lastPotiValue + tolerance) ) ||
+			 ( currentADCvalue < (p->lastPotiValue - tolerance) ) )
 		{
 			//sign. Potiwertaenderung gegenueber dem currentADCvalue
 			p->potiTelegramCountdown--;
