@@ -652,17 +652,6 @@
 			
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-				description="" >
-				<param pos="0" name="gruppe" description="" />
-			</message>
-				description="" >
-				<param pos="0" name="gruppe" description="" />
-			</message>
-
-				description="" >
-				<param pos="0" name="gruppe" description="" />
-			</message>
-
 			<message name="WS2812B_SEND" id="217"
 				description="" >
 				<param pos="0" name="gruppe" description="" />
