@@ -1,6 +1,6 @@
 # Makfile fuer ws2812-modul
-# 
-.PHONY:	release
+#
+.PHONY: release
 include ../../ARCH.inc
 #SHELL := /bin/bash
 
@@ -15,18 +15,18 @@ OBJCOPY = avr-objcopy
 CXX = avr-gcc
 
 ifeq ($(MCU),atmega328p)
-	F_CPU = 16000000 #3686400
-	MCU_DIR = C1416_$(MCU)
+	F_CPU = 16000000
+	MCU_DIR = C1416_$(MCU)_$(F_CPU)MHz
 else # MCU_atmega32 || MCU_atmega644p
-	F_CPU = 3686400
-	MCU_DIR = C1612_$(MCU)
+	F_CPU = 16000000
+	MCU_DIR = C1612_$(MCU)_$(F_CPU)MHz
 endif
 
 F_CAN   = 8000000
-CAN_SPEED = 50000 #125000
+CAN_SPEED = 125000
 
 DEFINES = -DMCU_$(MCU) -DF_CPU=$(F_CPU) -DF_CAN=$(F_CAN) -DCAN_SPEED=$(CAN_SPEED) \
-          -DCANIX_SYSLOG -DCANIX_HMS -DCANIX_RTS -DCANIX_EDS
+	  -DCANIX_SYSLOG -DCANIX_HMS -DCANIX_RTS -DCANIX_EDS
 DEFINES += $(GLOBAL_DEFINES)
 
 CFLAGS =  -mmcu=$(MCU) -Wall -Werror -Wstrict-prototypes -Os -mcall-prologues
@@ -83,7 +83,7 @@ load:
 
 enableDebugWIRE_atmega328p:
 	avrdude -c avrispmkII -p $(MCU) -B 12000 -P usb -U hfuse:w:0x88:m
-	
+
 disableDebugWIRE_atmega328p:
 	@# moeglich:  atmelice, atmelice_isp, atmelice_dw
 	avrdude -c atmelice_dw -p $(MCU) -P usb -U hfuse:w:0xC8:m

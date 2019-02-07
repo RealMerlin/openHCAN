@@ -61,7 +61,7 @@ int main(void)
 	canix_init();
 
 	// Haus-Elektrik Service Handler installieren
-	canix_reg_frame_callback(hauselektrik_callback, -1, 
+	canix_reg_frame_callback(hauselektrik_callback, -1,
 			HCAN_PROTO_SFP, HCAN_SRV_HES);
 
 	canix_reg_frame_callback(controllerboard_callback, -1,
@@ -73,10 +73,10 @@ int main(void)
 			HCAN_PROTO_SFP, HCAN_SRV_RTS);
 
 	devices_load_config();
-	
+
 	canix_reg_rtc_callback(timer_handler);
 	canix_reg_idle_callback(idle_handler);
-	
+
 	canix_mainloop();
 	return 0;
 }

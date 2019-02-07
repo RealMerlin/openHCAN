@@ -652,21 +652,6 @@
 			
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-			<message name="WS2812B_SEND" id="217"
-				description="" >
-				<param pos="0" name="gruppe" description="" />
-				<param pos="1" name="Pattern" description="" />
-				<param pos="2" name="R" description="" />
-				<param pos="3" name="G" description="" />
-				<param pos="4" name="B" description="" />
-				<param pos="5" name="BenutzeLEDsPattern" description="" />
-			</message>
-
-			<message name="WS2812B_REPLAY" id="218"
-			description="" >
-				<param pos="0" name="gruppe" description="" />
-			</message>
-			
 			<message name="ZUSTANDSMELDUNG" id="219"
 			description="" >
 				<param pos="0" name="gruppe" description="" />
@@ -675,6 +660,18 @@
 			</message>
 
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+			<message name="WS2812B_SEND" id="125"
+				description="steuert ein WS2812B LED Band direkt" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="Pattern"
+				description="1 = Nicht gewaehlte LEDs gehen aus; 2 = Nicht gewaehlte LEDs bleiben an" />
+				<param pos="2" name="R" description="Wert fuer Rot (uint8_t)" />
+				<param pos="3" name="G" description="Wert fuerG ruen (uint8_t)" />
+				<param pos="4" name="B" description="Wert fuer Blau (uint8_t)" />
+				<param pos="5" name="BenutzeLEDsPattern"
+				description="1 = Jede LED; 2 = jede zweite LED; 3 = jede dritte LED, usw." />
+			</message>
 
 		</service>
 
