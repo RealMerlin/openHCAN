@@ -965,20 +965,6 @@
 	
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-	<block type="224" name="gartenbewaesserung" size="5">
-		<field datatype="uint8_t" name="port_power" pos="0" />
-		<field datatype="uint8_t" name="gruppe0" pos="1" />
-		<field datatype="uint8_t" name="gruppe1" pos="2" />
-		<field datatype="uint8_t" name="gruppe2" pos="3" />
-		<field datatype="uint8_t" name="gruppe3" pos="4" />
-	</block>
-
-	<block type="225" name="bewegungsmelder" size="3">
-		<field datatype="uint8_t" name="port" pos="0" />
-		<field datatype="uint8_t" name="feature" pos="1" />
-		<field datatype="uint8_t" name="gruppe" pos="2" />
-	</block>
-
 	<block type="229" name="am2302" size="4">
 		<field datatype="uint8_t" name="io_pin" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
