@@ -14,7 +14,8 @@ OBJCOPY = avr-objcopy
 CXX = avr-gcc
 
 ifeq ($(MCU),atmega328p)
-	F_CPU = 3686400
+#	F_CPU = 3686400
+	F_CPU = 16000000
 	MCU_DIR = C1416_$(MCU)
 else # MCU_atmega32 || MCU_atmega644p
 	F_CPU = 3686400

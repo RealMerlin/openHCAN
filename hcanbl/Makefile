@@ -9,7 +9,7 @@ TARGET = main
 SRC    = $(TARGET).c
 		 
 ifeq ($(MCU),atmega328p)
-	F_CPU = 3686400 #16000000
+	F_CPU = 16000000 #3686400
 else # MCU_atmega32 || MCU_atmega644p
 	F_CPU = 3686400
 endif
