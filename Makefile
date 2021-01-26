@@ -27,6 +27,13 @@ alles:
 	make install
 	make tools xx="sudo make all"
 
+firmwareOnly:
+	make clean
+	make strukturen xx="make all"
+	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
+	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
+	#make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
+
 alles-silent:
 	make clean > /dev/null
 	make all > /dev/null
