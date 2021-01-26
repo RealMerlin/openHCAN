@@ -74,7 +74,7 @@ all:
 	make strukturen xx="make all"
 	make cDienste xx="make all"
 	make cppDienste xx="make all"
-	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p	
+	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
 	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
 	make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
 	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
