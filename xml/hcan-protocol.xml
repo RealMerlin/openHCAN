@@ -657,6 +657,24 @@
 				<param pos="0" name="gruppe" description="" />
 				<param pos="1" name="helligkeit" description="in Prozent" />
 				<param pos="1" name="frequenz" description="Blink Frequenz" />
+                       </message>
+			
+			<message name="1WIRE_LUFTFEUCHTIGKEIT" id="220"
+			description="" >
+				<param pos="0" name="gruppe" description="" />
+				<param pos="1" name="feuchtigkeit_hi" description="" />
+				<param pos="2" name="feuchtigkeit_lo" description="" />
+			</message>
+			
+			<message name="1WIRE_LUFTFEUCHTIGKEIT_QUERY" id="221"
+				description="fragt einen Temperatursensor nach der aktuellen Temperatur" >
+				<param pos="0" name="gruppe" description="Gruppe" />
+			</message>
+			<message name="1WIRE_LUFTFEUCHTIGKEIT_REPLAY" id="222"
+				description="Messergebnis (Fixed Point) eines DS18B20 1Wire Temperaturfuehlers als Antwort auf 1WIRE_TEMPERATURE_QUERY" >
+				<param pos="0" name="gruppe" description="Gruppe" />
+				<param pos="1" name="feuchtigkeit_hi" description="MSB" />
+				<param pos="2" name="feuchtigkeit_lo" description="LSB; 4 LSB sind Nachkommabits" />
 			</message>
 
 <!-- ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
