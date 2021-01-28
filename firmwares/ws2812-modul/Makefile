@@ -16,10 +16,10 @@ CXX = avr-gcc
 
 ifeq ($(MCU),atmega328p)
 	F_CPU = 16000000
-	MCU_DIR = C1416_$(MCU)_$(F_CPU)MHz
+	MCU_DIR = C1416_$(MCU)_$(F_CPU)Hz
 else # MCU_atmega32 || MCU_atmega644p
-	F_CPU = 16000000
-	MCU_DIR = C1612_$(MCU)_$(F_CPU)MHz
+	F_CPU = 3686400
+	MCU_DIR = C1612_$(MCU)_$(F_CPU)Hz
 endif
 
 F_CAN   = 8000000
@@ -30,6 +30,7 @@ DEFINES = -DMCU_$(MCU) -DF_CPU=$(F_CPU) -DF_CAN=$(F_CAN) -DCAN_SPEED=$(CAN_SPEED
 DEFINES += $(GLOBAL_DEFINES)
 
 CFLAGS =  -mmcu=$(MCU) -Wall -Werror -Wstrict-prototypes -Os -mcall-prologues
+CFLAGS += -std=gnu99
 CFLAGS += -I. -I../../canix -I../.. -I../../include
 CFLAGS += $(DEFINES)
 
@@ -61,11 +62,11 @@ $(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex
 	avr-size $(TARGET).hex
 
-$(TARGET).elf:
+$(TARGET).elf: $(SRC)
 	$(CXX) $(CFLAGS) -o $(TARGET).elf $(SRC) -Wl,-Map,$(TARGET).map
 
 clean_part:
-	sudo rm -f *.map *.elf
+	sudo rm -f *.map *.elf *.hex
 
 clean:
 	make clean_part

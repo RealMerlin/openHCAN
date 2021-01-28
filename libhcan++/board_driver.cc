@@ -46,7 +46,7 @@ bool board_driver::show_help ()
 		"	set ee <address> <value>           save value to eeprom\n" <<
 		"	set address <hcan-address>         save a new hcan address\n" <<
 		"	set boardtyp <hcan-boardtyp>       save a new hcan boardtyp [3=C1416|4=C1612|5=UI]\n" <<
-		"	set sysloglevel <level>            set the syslog level\n" <<
+		"	set sysloglevel <level>            set the syslog level [1=Critical|2=Error|3=Warning|4=Debug]\n" <<
 		"	bootloader                         boot into bootloader\n" <<
 		"	loadapp                            load the application\n" <<
 		"	reset                              generated a reset\n" << endl;
@@ -392,7 +392,15 @@ void board_driver::cmd_flash (const string &filename)
 
 	// Das zu flashende Hexfile laden
 	ihexfile hexfile;
-	hexfile.load(filename,m_page_size);
+	try
+	{
+		hexfile.load(filename,m_page_size);
+	}
+	catch (traceable_error &e)
+	{
+		cerr << e.what() << endl;
+		return;
+	}
 	size_t size = hexfile.size();
 
 	vector<uint8_t> data = hexfile.data();
@@ -766,6 +774,29 @@ void board_driver::cmd_show_system()
 	m_tcon.send_BUILD_VERSION_QUERY(m_bcon.src(), m_bcon.dst());
 	m_tcon.recv_BUILD_VERSION_REPLAY(m_bcon.dst(), m_bcon.src(), &hi, &lo);
 	cout << endl << "Build #:        " << (uint16_t)((hi << 8) | lo);
+	
+	uint8_t sysloglevel = read_eeprom_byte(EEPR_DEBUG_LEVEL);
+	cout << endl << "Sysloglevel:    ";
+	switch (sysloglevel)
+	{
+		case 1 :
+			cout << "CRITICAL (1)";
+			break;
+
+		case 2 :
+			cout << "ERROR (2)";
+			break;
+
+		case 3 :
+			cout << "WARNING (3)";
+			break;
+
+		case 4 :
+			cout << "DEBUG (4)";
+			break;
+
+		default : cout << "unknown";
+	}
 	cout << endl;
 
 }
