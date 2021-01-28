@@ -965,11 +965,12 @@
 	
 <!-- /////////////////////////////////////////////////////////////////////////////////////////////// -->
 
-	<block type="229" name="am2302" size="4">
+	<block type="229" name="humsensor" size="21">
 		<field datatype="uint8_t" name="io_pin" pos="0" />
 		<field datatype="uint8_t" name="gruppe" pos="1" />
-		<field datatype="uint8_t" name="interval" pos="2" />
-		<field datatype="uint8_t" name="feature" pos="3" />
+		<field datatype="uint8_t" name="modus" pos="2" />
+		<field datatype="uint8_t" name="interval" pos="3" />
+		<field datatype="char" name="ow_id" pos="4" size="17"/>
 	</block>
 
 <!--	<block type="230" name="zustandsmeldung" size="2">
