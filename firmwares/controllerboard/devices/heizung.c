@@ -544,16 +544,17 @@ inline void heizung_timer_handler(device_data_heizung *p, uint8_t zyklus)
 	}
 
 	//PID
-		if(p->destination_value < p->measure_value)
+		// 80 = 5 Grad mal 16!
+		if(p->destination_value < (p->measure_value - 80))
 		{
-			// wenn die gewuenschte Temperatur unter der gemessenen ist, Heizung direkt auf 0% schalten.
+			// wenn die gewuenschte Temperatur min. 5° unter der gemessenen ist, Heizung direkt auf 0% schalten.
 			p->pidvalue = 0;
 			//canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("PID fix:0"));
 		}
 		// 80 = 5 Grad mal 16!
 		else if((p->measure_value + 80) < p->destination_value)
 		{
-			// wenn die gewuenschte Temperatur 5° über der gemessenen liegt, Heizung direkt auf 100% schalten.
+			// wenn die gewuenschte Temperatur min. 5° über der gemessenen liegt, Heizung direkt auf 100% schalten.
 			p->pidvalue = 3000;
 			//canix_syslog_P(SYSLOG_PRIO_DEBUG, PSTR("PID fix:3000"));
 		}
