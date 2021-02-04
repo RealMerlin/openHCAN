@@ -16,23 +16,7 @@
 #include <avr/wdt.h>
 
 #include "../../controllerboard/darlingtonoutput.h"
-#include "../../controllerboard/darlingtonoutput.h"
 #include "../../controllerboard/devices.h"
-
-/*
- 	zeitzonen_ids = &(p->config.zeitzone0_id);
-	
-	for (i = 0; i < N_ZEITZONEN; i++)
-	{
-		if (zeitzone_matches(zeitzonen_ids[i]))
-		{
- */
-		/*
-canix_rtc_clock.sunset_hour
-canix_rtc_clock.sunset_minute
-canix_rtc_clock.sundown_hour
-canix_rtc_clock.sundown_minute
-*/
 
 static inline void sendMessage(device_data_zeitschaltuhr_astro *p, uint8_t zustandToSend);
 
@@ -46,6 +30,11 @@ void zeitschaltuhr_astro_init(device_data_zeitschaltuhr_astro *p, eds_block_p it
 	p->automatikEin = true;
 }
 
+inline uint8_t sundown_sunset_matches()
+{
+	return time_matches(canix_rtc_clock.sundown_hour, canix_rtc_clock.sundown_minute, canix_rtc_clock.sunset_hour, canix_rtc_clock.sunset_minute, 254);
+}
+
 inline void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p, uint8_t zyklus)
 {
 	if (zyklus != 1) return; // 1s-Zyklus verwendet
@@ -54,48 +43,28 @@ inline void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p
 	
 	if (p->state == 0)
 	{
-		if (p->config.feature & (1<<ZEITSCHALTUHR_ASTRO_FEATURE_EINSCHALT_ZEITZONE) && p->config.zeitzone_id != 255)
-		{
-			if ((p->state == 0) && zeitzone_matches(p->config.zeitzone_id))
-			{
-				// Beginn einer Zeitzone
-				p->state = 1;
-				sendMessage(p, HCAN_HES_POWER_GROUP_ON); // Power Gruppe einschalten
-				return;
-			}
-		}
-		else
-		{
-			//Einschalten nach Astro
-			if ((p->state == 0) && (time_matches(canix_rtc_clock.sundown_hour, canix_rtc_clock.sundown_minute, canix_rtc_clock.sunset_hour, canix_rtc_clock.sunset_minute, 254)))
-			{
-				//bei "von unter zu aufgang" Bit0 nicht gesetzt!
-				p->state = 1;
-				sendMessage(p, HCAN_HES_POWER_GROUP_ON); // Power Gruppe einschalten
-				return;
-			}
+		//Einschalten nach Astro
+		if (sundown_sunset_matches())
+		{ //ist aus
+			// waehrend der Zeitzone wird nicht eingeschaltet
+			if (p->config.zeitzone_id != 255 && zeitzone_matches(p->config.zeitzone_id)) return;
+			
+			p->state = 1;
+			sendMessage(p, HCAN_HES_POWER_GROUP_ON); // Power Gruppe einschalten
+			return;
 		}
 	}
-	else 
-	{
-		if (p->config.feature & (1<<ZEITSCHALTUHR_ASTRO_FEATURE_AUSSCHALT_ZEITZONE) && p->config.zeitzone_id != 255)
+	else
+	{ //ist an
+		// Zwischen Sonnenunter- und aufgang oder
+		// waehrend der Zeitzone wird ausgeschaltet
+		if (!sundown_sunset_matches() ||
+				(sundown_sunset_matches() &&
+				p->config.zeitzone_id != 255 && zeitzone_matches(p->config.zeitzone_id)))
 		{
-			if ((p->state == 1) && !zeitzone_matches(p->config.zeitzone_id))
-			{
-				// Beginn einer Zeitzone
-				p->state = 0;
-				sendMessage(p, HCAN_HES_POWER_GROUP_OFF); // Power Gruppe ausschalten
-				return;
-			}
-		}
-		else
-		{
-			if ((p->state == 1) && (!time_matches(canix_rtc_clock.sundown_hour, canix_rtc_clock.sundown_minute, canix_rtc_clock.sunset_hour, canix_rtc_clock.sunset_minute, 254)))
-			{
-				p->state = 0;
-				sendMessage(p, HCAN_HES_POWER_GROUP_OFF);
-				return;
-			}
+			p->state = 0;
+			sendMessage(p, HCAN_HES_POWER_GROUP_OFF);
+			return;
 		}
 	}
 

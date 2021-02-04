@@ -7,10 +7,6 @@
 
 #define ZEITSCHALTUHR_UPDATE_INTERVAL 173
 
-
-#define ZEITSCHALTUHR_ASTRO_FEATURE_EINSCHALT_ZEITZONE   3
-#define ZEITSCHALTUHR_ASTRO_FEATURE_AUSSCHALT_ZEITZONE   4
-
 typedef struct
 {
 	uint8_t type;
@@ -31,5 +27,6 @@ typedef struct
 void zeitschaltuhr_astro_init(device_data_zeitschaltuhr_astro *p, eds_block_p it);
 extern void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p, uint8_t zyklus);
 void zeitschaltuhr_astro_can_callback(device_data_zeitschaltuhr_astro *p, const canix_frame *frame);
+extern uint8_t sundown_sunset_matches(void);
 
 #endif
