@@ -43,7 +43,7 @@ CFLAGS += $(DEFINES)
 all:
 	$(MAKE) -C devices all
 	$(MAKE) allX
-	
+
 allX: $(TARGET).hex
 ifeq ($(MCU),atmega328p)
 	@SIZE="$(shell avr-size $(TARGET).hex | grep '$(TARGET).hex' | cut -f4 | xargs)" && if [ "$$SIZE" -gt "$(MAXSIZE_ATMEGA328P)" ]; then tput setaf 1; echo "Hex to large for ATmega328p!"; tput sgr0; exit 1;  fi;
@@ -56,7 +56,7 @@ endif
 	sudo mv $(TARGET).hex ./$(MCU_DIR)
 
 $(TARGET).hex: $(TARGET).elf
-	$(OBJCOPY) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex 
+	$(OBJCOPY) -R .eeprom -O ihex $(TARGET).elf $(TARGET).hex
 	avr-size $(TARGET).hex
 
 $(TARGET).elf: $(SRC)
