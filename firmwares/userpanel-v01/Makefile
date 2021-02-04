@@ -53,11 +53,11 @@ clean_part:
 	sudo rm -f *.map *.hex *.out
 
 clean:
-	make clean_part
+	$(MAKE) clean_part
 	sudo rm -fR ./UI_$(MCU)
 
 load:
-	make all
+	$(MAKE) all
 	@echo -------------------------
 	@echo Bsp.:  make load adr=71
 	@echo -------------------------

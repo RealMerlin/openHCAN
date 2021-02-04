@@ -51,8 +51,8 @@ all:
 	cp ../controllerboard/input.* ./
 	cp ../controllerboard/twimaster.* ./
 	cp ../controllerboard/buildver ./
-	cd devices; make all
-	make allX
+	$(MAKE) -C devices all
+	$(MAKE) allX
 
 allX: $(TARGET).hex
 	mkdir -p $(MCU_DIR)
@@ -69,13 +69,13 @@ clean_part:
 	sudo rm -f *.map *.elf *.hex
 
 clean:
-	make clean_part
+	$(MAKE) clean_part
 	sudo rm -fR ./$(MCU_DIR)
 	find ./ -maxdepth 1 -type f \( ! -iname "main.c" ! -iname "Makefile" \) -delete
 	cd devices && find ./ -maxdepth 1 -type f \( ! -iname "ws2812b.c" ! -iname "ws2812b.h" \) -delete
 
 load:
-	make all
+	$(MAKE) all
 	@echo -------------------------
 	@echo Bsp.:  make load adr=161
 	@echo -------------------------

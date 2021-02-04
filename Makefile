@@ -20,107 +20,110 @@
 
 include ./ARCH.inc
 .PHONY: tools
+CORES = $(shell grep 'cpu cores' /proc/cpuinfo | uniq | cut -d: -f2 | xargs)
 
 alles:
-	make clean
-	make all
-	make install
-	make tools xx="sudo make all"
+	$(MAKE) clean -j$(CORES)
+	$(MAKE) all
+	$(MAKE) tools -j$(CORES) xy="sudo" xx="all"
+	$(MAKE) install -j$(CORES)
 
 firmwareOnly:
-	make clean
-	make strukturen xx="make all"
-	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
-	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
-	#make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
+	$(MAKE) clean -j$(CORES)
+	$(MAKE) strukturen xy="" xx="all"
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega328p &&  $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega328p
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega32 &&    $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega32
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega644p &&  $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega644p
 
 alles-silent:
-	make clean > /dev/null
-	make all > /dev/null
-	make install > /dev/null
-	make tools xx="sudo make all" > /dev/null
-
+	$(MAKE) alles > /dev/null
 
 bananapi:
-	make strukturen xx="sudo make clean"
-	make cDienste xx="sudo make clean"
-	make cppDienste xx="sudo make clean"
-	make tools xx="sudo make clean"
+	$(MAKE) strukturen xy="sudo" xx="clean"
+	$(MAKE) cDienste -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) lib -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) cppDienste -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) tools xy="sudo" xx="clean"
 
-	make strukturen xx="make all"
-	make cDienste xx="make all"
-	make cppDienste xx="make all"
+	$(MAKE) strukturen xy="" xx="all"
+	$(MAKE) cDienste -j$(CORES) xy="" xx="all"
+	$(MAKE) cppDienste -j$(CORES) xy="" xx="all"
 
-	make strukturen xx="sudo make install"
-	make cDienste xx="sudo make install"
-	make cppDienste xx="sudo make install"
+	$(MAKE) strukturen xy="sudo" xx="install"
+	$(MAKE) cDienste -j$(CORES) xy="sudo" xx="install"
+	$(MAKE) lib -j$(CORES) xy="sudo" xx="install"
+	$(MAKE) cppDienste -j$(CORES) xy="sudo" xx="install"
 
-	make tools xx="sudo make all"
+	$(MAKE) tools -j$(CORES) xy="sudo" xx="all"
 
 clean:
-	make strukturen xx="sudo make clean"
-	make cDienste xx="sudo make clean"
-	make cppDienste xx="sudo make clean"
-	make firmware xx="sudo make clean" parm2=MCU=atmega328p
-	make firmware xx="sudo make clean" parm2=MCU=atmega32
-	make firmware xx="sudo make clean" parm2=MCU=atmega644p
-#	make firmwareOhneEds xx="sudo make clean"
-	make tools xx="sudo make clean"
+	$(MAKE) strukturen xy="sudo" xx="clean"
+	$(MAKE) cDienste -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) lib -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) cppDienste -j$(CORES) xy="sudo" xx="clean"
+	$(MAKE) firmware -j$(CORES) xy="sudo" xx="clean" parm2=MCU=atmega328p
+	$(MAKE) firmware -j$(CORES) xy="sudo" xx="clean" parm2=MCU=atmega32
+	$(MAKE) firmware -j$(CORES) xy="sudo" xx="clean" parm2=MCU=atmega644p
+	$(MAKE) firmwareOhneEds xy="sudo" xx="clean"
+	$(MAKE) tools xy="sudo" xx="clean"
 	@# folgendes wuerde den "Dropbox-Pfad" erzwingen:  cd hcanhab2_mqtt; make clean
 	#
 	@#sudo find -type f -name ".depend" | xargs rm -f
 
 all:
-	make strukturen xx="make all"
-	make cDienste xx="make all"
-	make cppDienste xx="make all"
-	make firmware xx="make all" parm2=MCU=atmega328p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega328p
-	make firmware xx="make all" parm2=MCU=atmega32;    make firmware xx="sudo make clean_part" parm2=MCU=atmega32
-	make firmware xx="make all" parm2=MCU=atmega644p;  make firmware xx="sudo make clean_part" parm2=MCU=atmega644p
-	make firmwareOhneEds xx="sudo make clean"; make firmwareOhneEds xx="make all"
+	$(MAKE) strukturen xy="" xx="all"
+	$(MAKE) cDienste -j$(CORES) xy="" xx="all"
+	$(MAKE) cppDienste -j$(CORES) xy="" xx="all"
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega328p &&  $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega328p
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega32 &&    $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega32
+	$(MAKE) firmware xy="" xx="all" parm2=MCU=atmega644p &&  $(MAKE) firmware -j$(CORES) xy="sudo" xx="clean_part" parm2=MCU=atmega644p
+	$(MAKE) firmwareOhneEds xy="sudo" xx="clean" && $(MAKE) firmwareOhneEds xy="" xx="all"
 	
 install:
-	make strukturen xx="sudo make install"
-	make cDienste xx="sudo make install"
-	make cppDienste xx="sudo make install"
+	$(MAKE) strukturen xy="sudo" xx="install"
+	$(MAKE) cDienste -j$(CORES) xy="sudo" xx="install"
+	$(MAKE) lib -j$(CORES) xy="sudo" xx="install"
+	$(MAKE) cppDienste -j$(CORES) xy="sudo" xx="install"
 	##############################################################################
 	# Nun kann die Firmware geladen werden (Bootloader flashen, Firmware loaden) #
 	##############################################################################
 
 #staticAnalyse:
-#	make cDienste xx="scan-build -o ./scanBuild make all -j4"
-#	make cppDienste xx="scan-build -o ./scanBuild make allSrc -j4"
+#	$(MAKE) cDienste xx="scan-build -o ./scanBuild make all -j4"
+#	$(MAKE) cppDienste xx="scan-build -o ./scanBuild make allSrc -j4"
 	@# avr-clang notwendig:   make firmware xx="scan-build -o ./scanBuild make all -j4"
 	
 #staticAnalyseClean:
 #	sudo find -type f -name "scanBuild" | xargs rm -f
 
 strukturen:
-	cd xml; $(xx)
+	$(xy) $(MAKE) $(xx) -C xml
 
 cDienste: 
-	cd hcand; $(xx)
-	cd hcanaddressd; $(xx)
-	cd hcansocketd; $(xx)
-	cd hcan4mqttpc; $(xx)
+	$(xy) $(MAKE) $(xx) -C hcand
+	$(xy) $(MAKE) $(xx) -C hcanaddressd
+	$(xy) $(MAKE) $(xx) -C hcansocketd
+	$(xy) $(MAKE) $(xx) -C hcan4mqttpc
+
+lib:
+	$(xy) $(MAKE) $(xx) -C libhcan++
+	$(xy) $(MAKE) $(xx) -C libhcandata
 
 cppDienste:	
-	cd libhcan++; $(xx)
-	cd telican; $(xx)
-	cd libhcandata; $(xx)
-	cd check_hcan; $(xx)
-	cd hcanswd; $(xx)
-	cd hcandq; $(xx)
+	$(xy) $(MAKE) $(xx) -C telican
+	$(xy) $(MAKE) $(xx) -C check_hcan
+	$(xy) $(MAKE) $(xx) -C hcanswd
+	$(xy) $(MAKE) $(xx) -C hcandq
 
 firmware: 
-	cd hcanbl; $(xx) $(parm2)
-	cd firmwares/controllerboard; $(xx) $(parm2)
-#	cd firmwares/userpanel-v01; $(xx) $(parm2)
-	cd firmwares/ws2812-modul; $(xx) $(parm2)
+	$(xy) $(MAKE) $(xx) -C hcanbl $(parm2)
+	$(xy) $(MAKE) $(xx) -C firmwares/controllerboard $(parm2)
+#	$(xy) $(MAKE) $(xx) -C firmwares/userpanel-v01 $(parm2)
+	$(xy) $(MAKE) $(xx) -C firmwares/ws2812-modul $(parm2)
 
 firmwareOhneEds:
-#	cd firmwares/usv-modul; $(xx)
+#	$(xy) $(MAKE) $(xx) -C firmwares/usv-modul
 
 tools:
-	cd tools; $(xx)
-	cd tools/hcanextid; $(xx)
+	$(xy) $(MAKE) $(xx) -C tools
+	$(xy) $(MAKE) $(xx) -C tools/hcanextid

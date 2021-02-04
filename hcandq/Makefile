@@ -33,8 +33,7 @@ allSrc:
 	$(CXX) $(CXXFLAGS) -o $(SRC) -o $(TARGET) $(LD_FLAGS)
 
 clean:
-	rm -f *.o
-	sudo rm -f $(TARGET)
+	rm -f *.o *.so $(TARGET)
 
 install:
 	strip $(TARGET)

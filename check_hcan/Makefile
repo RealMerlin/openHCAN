@@ -19,8 +19,7 @@ CXXFLAGS += -Werror
 all: libhcan++ $(TARGET)
 
 libhcan++:
-	ln -sf libhcan++.so.2.0 libhcan++.so
-	cd ../libhcan++ && $(MAKE)
+	$(MAKE) -C ../libhcan++
 
 $(TARGET): $(OBJ) libhcan++
 	$(CXX) -o $@ $(OBJ) $(LD_FLAGS) 
@@ -29,8 +28,8 @@ allSrc:
 	$(CXX) $(CXXFLAGS) -o $(SRC) -o $(TARGET) $(LD_FLAGS)
 
 clean:
-	rm -f *.o $(TARGET)
-	cd ../libhcan++ && make clean
+	rm -f *.o *.so $(TARGET)
+	$(MAKE) -C ../libhcan++ clean
 
 
 install:

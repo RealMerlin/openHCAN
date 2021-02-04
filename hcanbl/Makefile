@@ -98,6 +98,6 @@ clean_part:
 	sudo rm -f *.map *.out
 
 clean:
-	make clean_part
+	$(MAKE) clean_part
 	sudo rm -fR ./hcanBL_$(MCU)
 

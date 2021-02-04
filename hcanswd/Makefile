@@ -20,11 +20,10 @@ CXXFLAGS += -g
 all: libhcan++ libhcandata $(TARGET)
 
 libhcan++:
-	ln -sf libhcan++.so.2.0 libhcan++.so
-	cd ../libhcan++ && $(MAKE)
+	$(MAKE) -C ../libhcan++
 
 libhcandata:
-	cd ../libhcandata && $(MAKE)
+	$(MAKE) -C ../libhcandata
 
 $(TARGET): $(OBJ) libhcan++ libhcandata
 	$(CXX) -o $@ $(OBJ) $(LD_FLAGS) 
@@ -33,7 +32,7 @@ allSrc:
 	$(CXX) $(CXXFLAGS) -o $(SRC) -o $(TARGET) $(LD_FLAGS)
 
 clean:
-	rm -f *.o $(TARGET)
+	rm -f *.o *.so $(TARGET)
 
 install:
 	# strip ./$(TARGET)

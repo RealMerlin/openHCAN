@@ -22,6 +22,9 @@ CXXFLAGS += -Werror
 
 all: $(TARGET)
 
+libhcan++:
+	$(MAKE) -C ../libhcan++
+
 $(TARGET):$(OBJ) libhcan++
 	$(CXX) -o $@ $(OBJ) $(LD_FLAGS)
 
@@ -37,4 +40,3 @@ clean:
 install:
 	strip ./$(TARGET)
 	install ./$(TARGET) /usr/bin
-	

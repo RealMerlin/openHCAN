@@ -34,8 +34,8 @@ CFLAGS += -I. -I../../canix -I../.. -I../../include
 CFLAGS += $(DEFINES)
 
 all:
-	cd devices; make all
-	make allX
+	$(MAKE) -C devices all
+	$(MAKE) allX
 	
 allX: $(TARGET).hex
 	mkdir -p $(MCU_DIR)
@@ -52,13 +52,13 @@ clean_part:
 	sudo rm -f *.map *.elf
 
 clean:
-	make clean_part
+	$(MAKE) clean_part
 	sudo rm -fR ./$(MCU_DIR)
 	sudo rm -f devices.c devices.h timer.c
-	cd devices; rm -f devices.xml
+	cd devices && rm -f devices.xml
 
 load:
-	make all
+	$(MAKE) all
 	@echo -------------------------
 	@echo Bsp.:  make load adr=161
 	@echo -------------------------

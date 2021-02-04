@@ -5,8 +5,8 @@ TARGET = hcan-backup-config hcan-discover hcan-restore-config hcan-protocol
 .PHONY: all install
 
 all: 
-	make setEnvironment
-	make install
+	$(MAKE) setEnvironment
+	$(MAKE) install
 
 install:
 	sudo install $(TARGET) /usr/bin
@@ -22,4 +22,4 @@ setEnvironment:
 	
 
 clean:
-	cd /usr/bin/; sudo rm -f $(TARGET)
+	cd /usr/bin/ && sudo rm -f $(TARGET)

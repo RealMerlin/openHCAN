@@ -39,7 +39,7 @@ $(TARGET).out : $(OBJ)
 	$(CXX) $(CFLAGS) -o $(TARGET).out $(SRC) -Wl,-Map,$(TARGET).map
 
 clean:
-	cd ../../canix; rm -f *.lst
+	cd ../../canix && rm -f *.lst
 	rm -f *.map *.out *.hex
 
 load: $(TARGET).hex
