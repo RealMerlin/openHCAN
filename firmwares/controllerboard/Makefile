@@ -12,15 +12,22 @@ adr = 1022
 
 OBJCOPY = avr-objcopy
 CXX = avr-gcc
+DEVICESTOFILTEROUT = ./devices/rolladenAutomat.c ./devices/rolladenSchlitzpos.c ./devices/helligkeitssensor.c ./devices/zentralheizungspumpe.c ./devices/analogComparator.c
 
 ifeq ($(MCU),atmega328p)
 #	F_CPU = 3686400
 	F_CPU = 16000000
 	MCU_DIR = C1416_$(MCU)
-else # MCU_atmega32 || MCU_atmega644p
+	SRC := $(filter-out $(DEVICESTOFILTEROUT), $(SRC))
+else ifeq ($(MCU),atmega32)
+	F_CPU = 3686400
+	MCU_DIR = C1612_$(MCU)
+	SRC := $(filter-out $(DEVICESTOFILTEROUT), $(SRC))
+else ifeq ($(MCU),atmega644p)
 	F_CPU = 3686400
 	MCU_DIR = C1612_$(MCU)
 endif
+
 
 F_CAN   = 8000000
 CAN_SPEED = 125000

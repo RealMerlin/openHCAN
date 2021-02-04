@@ -1,7 +1,7 @@
 A = "<device name=\"
 E = \"></device>"
-DEVICES := $(patsubst %.c, $(A)%$(E) , $(wildcard *.c))
-
+DEVICESTOFILTEROUT = rolladenAutomat.c rolladenSchlitzpos.c helligkeitssensor.c zentralheizungspumpe.c analogComparator.c
+DEVICES := $(patsubst %.c, $(A)%$(E) , $(filter-out $(DEVICESTOFILTEROUT), $(wildcard *.c)))
 
 INDENT_OPTS = -orig -ci4
 
