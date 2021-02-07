@@ -151,20 +151,20 @@ void run_timed_mode(const po::variables_map &map)
 			float Sonnenaufgang_MEZ = Sonnenaufgang_MOZ - OestlicheBreite / 15 + Zeitzone; //7.838
 			float Sonnenuntergang_MEZ = Sonnenuntergang_MOZ - OestlicheBreite / 15 + Zeitzone; //7.838
 
-			double sunset = Sonnenaufgang_MEZ; //(1136-153*cos((dayOfYear+8)/58.09)) / 60;
+			double sunrise = Sonnenaufgang_MEZ; //(1136-153*cos((dayOfYear+8)/58.09)) / 60;
 			double sundown = Sonnenuntergang_MEZ; //(405+90*cos((dayOfYear+8)/58.09)) / 60;
 
-			int sunset_hour = sunset;
+			int sunrise_hour = sunrise;
 			int sundown_hour = sundown;
-			sunset = sunset - sunset_hour;
+			sunrise = sunrise - sunrise_hour;
 			sundown = sundown - sundown_hour;
-			int sunset_minute = (double) sunset * 60;
+			int sunrise_minute = (double) sunrise * 60;
 			int sundown_minute = (double) sundown * 60;
 
-			con.send_SUNSET_SUNDOWN_INFO(
+			con.send_SUNRISE_SUNDOWN_INFO(
 					HCAN_MULTICAST_INFO, HCAN_MULTICAST_INFO,
 					0,
-					sunset_hour, sunset_minute,
+					sunrise_hour, sunrise_minute,
 					sundown_hour, sundown_minute);
 		}
 		sleep(1);

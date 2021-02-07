@@ -36,9 +36,9 @@ typedef struct
 	uint8_t year;
 
 	/** Sonneaufgang Stunde: 0..23 */
-	uint8_t sunset_hour;
+	uint8_t sunrise_hour;
 	/** Sonneaufgang Minute: 0..59 */
-	uint8_t sunset_minute;
+	uint8_t sunrise_minute;
 	/** Sonnenuntergang Stunde: 0..23 */
 	uint8_t sundown_hour;
 	/** Sonnenuntergang Minute: 0..59 */

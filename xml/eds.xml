@@ -982,7 +982,7 @@
 		<field datatype="uint8_t" name="power_gruppe" pos="0" />
 		<field datatype="uint8_t" name="automatikEin_schalter_gruppe" pos="1" />
 		<field datatype="uint8_t" name="feature" pos="2" />
-		<field datatype="uint8_t" name="offset_sunset" pos="3" />
+		<field datatype="uint8_t" name="offset_sunrise" pos="3" />
 		<field datatype="uint8_t" name="offset_sundown" pos="4" />
 		<field datatype="uint8_t" name="zeitzone_id" pos="5" />
 		

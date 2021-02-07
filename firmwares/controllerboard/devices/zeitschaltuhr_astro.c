@@ -30,9 +30,9 @@ void zeitschaltuhr_astro_init(device_data_zeitschaltuhr_astro *p, eds_block_p it
 	p->automatikEin = true;
 }
 
-inline uint8_t sundown_sunset_matches()
+inline uint8_t sundown_sunrise_matches()
 {
-	return time_matches(canix_rtc_clock.sundown_hour, canix_rtc_clock.sundown_minute, canix_rtc_clock.sunset_hour, canix_rtc_clock.sunset_minute, 254);
+	return time_matches(canix_rtc_clock.sundown_hour, canix_rtc_clock.sundown_minute, canix_rtc_clock.sunrise_hour, canix_rtc_clock.sunrise_minute, 254);
 }
 
 inline void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p, uint8_t zyklus)
@@ -44,7 +44,7 @@ inline void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p
 	if (p->state == 0)
 	{
 		//Einschalten nach Astro
-		if (sundown_sunset_matches())
+		if (sundown_sunrise_matches())
 		{ //ist aus
 			// waehrend der Zeitzone wird nicht eingeschaltet
 			if (p->config.zeitzone_id != 255 && zeitzone_matches(p->config.zeitzone_id)) return;
@@ -58,8 +58,8 @@ inline void zeitschaltuhr_astro_timer_handler(device_data_zeitschaltuhr_astro *p
 	{ //ist an
 		// Zwischen Sonnenunter- und aufgang oder
 		// waehrend der Zeitzone wird ausgeschaltet
-		if (!sundown_sunset_matches() ||
-				(sundown_sunset_matches() &&
+		if (!sundown_sunrise_matches() ||
+				(sundown_sunrise_matches() &&
 				p->config.zeitzone_id != 255 && zeitzone_matches(p->config.zeitzone_id)))
 		{
 			p->state = 0;
