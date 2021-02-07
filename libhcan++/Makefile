@@ -2,7 +2,7 @@
 #
 TARGET = libhcan++
 
-SRC = $(patsubst %.cc, %.cc , $(wildcard *.cc))
+SRC = $(wildcard *.cc)
 OBJ = $(patsubst %.cc,%.o,$(wildcard *.cc))
 OBJ += ../telican/installation_data.o
 

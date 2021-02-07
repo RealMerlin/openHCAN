@@ -2,7 +2,7 @@
 #
 TARGET = libhcandata
 
-SRC = $(patsubst %.cc, %.cc , $(wildcard *.cc))
+SRC = $(wildcard *.cc)
 OBJ = $(patsubst %.cc,%.o,$(wildcard *.cc))
 
 CXX = g++

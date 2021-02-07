@@ -2,8 +2,8 @@
 # 
 .PHONY:	release
 
-SRC = $(patsubst %.c, %.c , $(wildcard *.c))
-SRC += $(patsubst %.c, %.c , $(wildcard ../../canix/*.c))
+SRC = $(wildcard *.c)
+SRC += $(wildcard ../../canix/*.c)
 
 MCU     = atmega32
 TARGET  = main

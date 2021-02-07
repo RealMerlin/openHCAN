@@ -1,8 +1,8 @@
 TARGET = hcan4mqttpc
 
 
-SRC = $(patsubst %.c, %.c , $(wildcard *.c))
-SRC += $(patsubst %.c, %.c , $(wildcard ./MQTTPacket/src/*.c))
+SRC = $(wildcard *.c)
+SRC += $(wildcard ./MQTTPacket/src/*.c)
 
 CXX = gcc
 

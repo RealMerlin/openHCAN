@@ -3,9 +3,9 @@
 .PHONY:	release
 include ../../ARCH.inc
 
-SRC = $(patsubst %.c, %.c , $(wildcard *.c))
-SRC += $(patsubst %.c, %.c , $(wildcard ./devices/*.c))
-SRC += $(patsubst %.c, %.c , $(wildcard ../../canix/*.c))
+SRC = $(wildcard *.c)
+SRC += $(wildcard ./devices/*.c)
+SRC += $(wildcard ../../canix/*.c)
 
 TARGET = main
 adr = 1022

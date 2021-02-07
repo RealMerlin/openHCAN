@@ -15,8 +15,8 @@ else
 	AVRDUDE_FLASH = avrdude -c avrispmkII -p m32 -P usb -U flash:w:"UI_$(MCU)/$(TARGET).hex" -U hfuse:w:0xC0:m -U lfuse:w:0x0f:m
 endif
 
-SRC = $(patsubst %.c, %.c , $(wildcard *.c))
-SRC += $(patsubst %.c, %.c , $(wildcard ../../canix/*.c))
+SRC = $(wildcard *.c)
+SRC += $(wildcard ../../canix/*.c)
 
 OBJCOPY = avr-objcopy
 CXX = avr-gcc

@@ -4,7 +4,7 @@
 
 TARGET = telican
 
-SRC = $(patsubst %.cc, %.cc , $(wildcard *.cc))
+SRC = $(wildcard *.cc)
 OBJ = $(patsubst %.cc,%.o,$(wildcard *.cc))
 
 LD_FLAGS = -Wl,--export-dynamic -L ../libhcan++ \
