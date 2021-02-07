@@ -1,7 +1,19 @@
+include ../../../ARCH.inc
+
 A = "<device name=\"
 E = \"></device>"
-DEVICESTOFILTEROUT = rolladenAutomat.c rolladenSchlitzpos.c helligkeitssensor.c zentralheizungspumpe.c analogComparator.c
-DEVICES := $(patsubst %.c, $(A)%$(E) , $(filter-out $(DEVICESTOFILTEROUT), $(wildcard *.c)))
+
+SRC = $(wildcard *.c)
+
+ifeq ($(MCU),atmega328p)
+	SRC := $(filter-out $(notdir $(NOTIN328p)), $(SRC))
+else ifeq ($(MCU),atmega32)
+	SRC := $(filter-out $(notdir $(NOTIN32)), $(SRC))
+else ifeq ($(MCU),atmega644p)
+	SRC := $(filter-out $(notdir $(NOTIN644p)), $(SRC))
+endif
+
+DEVICES := $(patsubst %.c, $(A)%$(E) , $(SRC))
 
 INDENT_OPTS = -orig -ci4
 

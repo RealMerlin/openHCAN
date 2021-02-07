@@ -40,3 +40,10 @@ MAXSIZE_ATMEGA328P = 28672
 MAXSIZE_ATMEGA32   = 28672
 MAXSIZE_ATMEGA644P = 61440
 ###########################
+
+# Do not compile specific devices in
+###########################
+NOTIN328p = ./devices/rolladenAutomat.c ./devices/rolladenSchlitzpos.c ./devices/helligkeitssensor.c ./devices/zentralheizungspumpe.c ./devices/analogComparator.c
+NOTIN32   = ./devices/rolladenAutomat.c ./devices/rolladenSchlitzpos.c ./devices/helligkeitssensor.c ./devices/zentralheizungspumpe.c ./devices/analogComparator.c
+NOTIN644p =
+###########################
