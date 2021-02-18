@@ -41,31 +41,31 @@ board_driver_p driver_factory::make_driver (board_connection &bcon,
 					return board_driver_p(new atmega_board_driver(bcon));
 			};
 
-			case HCAN_ARCH_ATMEGA644P :
-			case HCAN_ARCH_ATMEGA644P_legacy :
-				page_size = 256;
-				switch (type)
-				{
-					case HCAN_BOARDTYP_C1612 : // Controllerboard-1612 v01
-						return board_driver_p(new controllerboard_driver(bcon, page_size));
-					case HCAN_BOARDTYP_UI : // Userpanel v01
-						return board_driver_p(new userpanel_driver(bcon, page_size));
-					default :
-						cerr << "warning: unknown board type id " << int(type)
-							<< ", using generic atmega644p driver..." << endl;
-						return board_driver_p(new atmega_board_driver(bcon, page_size));
-				};
+		case HCAN_ARCH_ATMEGA328P :
+			switch (type)
+			{
+				case HCAN_BOARDTYP_C1416 :
+					return board_driver_p(new controllerboard_driver(bcon, page_size));
+				default :
+					cerr << "warning: unknown board type id " << int(type)
+						<< ", using generic atmega328p driver..." << endl;
+					return board_driver_p(new atmega_board_driver(bcon));
+			};
 
-				case HCAN_ARCH_ATMEGA328P :
-					switch (type)
-					{
-						case HCAN_BOARDTYP_C1416 :
-							return board_driver_p(new controllerboard_driver(bcon, page_size));
-						default :
-							cerr << "warning: unknown board type id " << int(type)
-								<< ", using generic atmega328p driver..." << endl;
-							return board_driver_p(new atmega_board_driver(bcon));
-					};
+		case HCAN_ARCH_ATMEGA644P :
+		case HCAN_ARCH_ATMEGA644P_legacy :
+			page_size = 256;
+			switch (type)
+			{
+				case HCAN_BOARDTYP_C1612 : // Controllerboard-1612 v01
+					return board_driver_p(new controllerboard_driver(bcon, page_size));
+				case HCAN_BOARDTYP_UI : // Userpanel v01
+					return board_driver_p(new userpanel_driver(bcon, page_size));
+				default :
+					cerr << "warning: unknown board type id " << int(type)
+						<< ", using generic atmega644p driver..." << endl;
+					return board_driver_p(new atmega_board_driver(bcon, page_size));
+			};
 
 		default : // unknown arch
 			cerr << "warning: unknown arch id " << std::hex << int(arch)
