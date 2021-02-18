@@ -46,6 +46,8 @@ board_driver_p driver_factory::make_driver (board_connection &bcon,
 			{
 				case HCAN_BOARDTYP_C1416 :
 					return board_driver_p(new controllerboard_driver(bcon, page_size));
+				case HCAN_BOARDTYP_UI : // Userpanel v01
+					return board_driver_p(new userpanel_driver(bcon));
 				default :
 					cerr << "warning: unknown board type id " << int(type)
 						<< ", using generic atmega328p driver..." << endl;
