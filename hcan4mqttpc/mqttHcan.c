@@ -154,6 +154,9 @@ static inline uint8_t isItTopic4Broker(uint8_t msg4broker)
 {
 	switch (msg4broker)
 	{
+		case HCAN_HES_TASTER_DOWN:
+		case HCAN_HES_TASTER_UP:
+
 		case HCAN_HES_POWER_GROUP_STATE_REPLAY:
 		case HCAN_HES_POWER_GROUP_STATE_INFO:
 
@@ -187,6 +190,11 @@ size_t catHesTopic4Broker(char * str, const struct can_frame * cf)
 	const size_t maxSize = 30;
 	switch (cf->data[1])
 	{
+		case HCAN_HES_TASTER_DOWN:
+			return snprintf(str, maxSize, "%d/DOWN/%d", cf->data[2], cf->data[3]);
+		case HCAN_HES_TASTER_UP:
+			return snprintf(str, maxSize, "%d/UP/%d", cf->data[2], cf->data[3]);
+
 		case HCAN_HES_POWER_GROUP_STATE_REPLAY:
 		case HCAN_HES_POWER_GROUP_STATE_INFO:
 			return snprintf(str, maxSize, "%d/%s", cf->data[2], cf->data[3] ? "ON":"OFF");
